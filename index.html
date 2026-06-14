@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="TURUP!">
+<meta name="theme-color" content="#56D2FF">
+<link rel="manifest" href="manifest.json">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard Variable', 'Noto Sans KR', -apple-system, sans-serif; background: #0f172a; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .scr { position: absolute; inset: 0; }
+    .nav-fixed { position: absolute; bottom: 0; left: 0; right: 0; height: 89px; z-index: 9999; transform: translateZ(0); will-change: transform; }
+    .scroll { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .scroll::-webkit-scrollbar { display: none; }
+    .nav-btn { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 60px; transition: opacity .15s; }
+    .nav-btn:active { opacity: 0.7; }
+    .tappable { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .tappable:active { opacity: 0.75; }
+    @keyframes barGrowA { from{transform:scaleY(0)} to{transform:scaleY(1)} }
+    @keyframes barGrowB { from{transform:scaleY(0)} to{transform:scaleY(1)} }
+    @keyframes pbGrowA  { from{transform:scaleX(0); transform-origin:left} to{transform:scaleX(1); transform-origin:left} }
+    @keyframes pbGrowB  { from{transform:scaleX(0); transform-origin:left} to{transform:scaleX(1); transform-origin:left} }
+    .bar-fill { animation-duration:.85s; animation-timing-function:cubic-bezier(.25,.46,.45,.94); animation-fill-mode:both; transform-origin:bottom center; }
+    .pb-fill  { animation-duration:1s;   animation-timing-function:cubic-bezier(.25,.46,.45,.94); animation-fill-mode:both; transform-origin:left; transform-box:fill-box; }
+    @keyframes toastIn { 0%{opacity:0;transform:translateY(16px)} 15%,85%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(0)} }
+    .toast-anim { animation: toastIn 2.2s ease both; }
+    @keyframes splashPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+    .splash-char { animation: splashPulse 2.4s ease-in-out infinite; }
+    @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @keyframes floatYSlow { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    @keyframes sway { 0%,100%{transform:rotate(0deg) scale(1)} 30%{transform:rotate(2.5deg) scale(1.02)} 70%{transform:rotate(-2deg) scale(0.99)} }
+    @keyframes swaySlow { 0%,100%{transform:rotate(0deg) scale(1)} 40%{transform:rotate(-3deg) scale(1.02)} 80%{transform:rotate(2deg) scale(0.99)} }
+    @keyframes driftX { 0%,100%{transform:translateX(0)} 50%{transform:translateX(6px)} }
+    @keyframes driftXRev { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-5px)} }
+    .anim-turtle { animation: floatY 3.6s ease-in-out infinite; transform-origin: bottom center; }
+    .anim-flower-l { animation: sway 4.2s ease-in-out infinite; transform-origin: bottom center; }
+    .anim-flower-r { animation: swaySlow 5s ease-in-out infinite 0.8s; transform-origin: bottom center; }
+    .anim-cloud-r { animation: driftX 5.5s ease-in-out infinite; }
+    .anim-cloud-r2 { animation: driftXRev 6.5s ease-in-out infinite 1s; }
+    .anim-shadow { animation: floatYSlow 3.6s ease-in-out infinite; }
+    @keyframes ringGlow { 0%,100%{box-shadow:inset 0 0 15px rgb(120,219,255)} 50%{box-shadow:inset 0 0 30px rgb(86,210,255)} }
+    .ring-outer { animation: ringGlow 3s ease-in-out infinite; }
+    .ring-inner { animation: ringGlow 3s ease-in-out infinite .5s; }
+    .status-spacer { height: env(safe-area-inset-top, 0px); }
+    @keyframes ringFillA {
+      from { stroke-dashoffset: 603.2; }
+      to   { stroke-dashoffset: 96.5; }
+    }
+    @keyframes ringFillB {
+      from { stroke-dashoffset: 603.2; }
+      to   { stroke-dashoffset: 96.5; }
+    }
+  </style>
+</helmet>
+
+<!-- Outer wrapper -->
+<div style="min-height:100vh; background:linear-gradient(135deg,#0f172a,#1e293b); display:flex; justify-content:center; align-items:center; padding:20px;">
+  <!-- Phone shell -->
+  <div style="position:relative; width:393px; flex-shrink:0;">
+    <!-- Outer bezel -->
+    <div style="background:#1c1c1e; border-radius:56px; padding:10px; box-shadow:0 0 0 2px #3a3a3c, 0 50px 100px rgba(0,0,0,0.9), 0 0 60px rgba(86,210,255,0.08);">
+      <!-- Screen area 375×812 -->
+      <div style="position:relative; width:375px; height:812px; background:white; border-radius:48px; overflow:hidden;">
+
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: SPLASH (피그마 A 프레임 — 글자 없는 버전)
+        ════════════════════════════════════════ -->
+        <div class="scr tappable" style="opacity:{{ op_splash }}; pointer-events:{{ pe_splash }}; background:linear-gradient(180deg,rgb(255,251,237) 0%,rgb(86,210,255) 100%);" onClick="{{ gotoHome }}">
+          <!-- 심볼 아이콘: Group 9.svg (181×56) — 눈 2개 + 입 곡선 -->
+          <div style="position:absolute; left:97px; top:393px; width:181px; height:56px;">
+            <img src="uploads/Group 9.svg" style="width:181px; height:56px; display:block;"/>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: HOME
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_home }}; pointer-events:{{ pe_home }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <!-- Hero gradient zone -->
+            <div style="position:relative; background:linear-gradient(180deg,rgb(221,246,255) 0%,rgb(255,251,235) 68%,rgb(247,247,247) 90%); overflow:hidden;">
+              <div class="status-spacer"></div>
+              <!-- Header -->
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; padding:24px 24px 12px;">
+                <div>
+                  <div style="font-size:24px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; line-height:1.4;">좋은 아침입니다!</div>
+                  <div style="font-size:16px; color:rgb(134,143,137); letter-spacing:-0.03em; margin-top:2px;">오늘 자세를 점검해 봅시다.</div>
+                </div>
+                <div class="tappable" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center; margin-top:4px;" onClick="{{ gotoNotifications }}">
+                  <svg width="20" height="22" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                </div>
+              </div>
+              <!-- Character scene (375×326 — figma exact z-order) -->
+              <div style="position:relative; width:375px; height:326px; overflow:hidden; flex-shrink:0;">
+                <!-- 1. background SVG -->
+                <img src="assets/home-hero.svg" style="position:absolute; left:0; top:0; width:375px; height:326px; object-fit:cover; pointer-events:none;"/>
+                <!-- 2. 나무들 (잔디 언덕 뒤) -->
+                <img src="assets/tree-right.png" class="anim-flower-r" style="position:absolute; left:238px; top:98.5px; width:143px; height:143px; object-fit:cover; pointer-events:none;"/>
+                <img src="assets/tree-full.png" class="anim-flower-l" style="position:absolute; left:287px; top:118.5px; width:128px; height:128px; object-fit:cover; pointer-events:none;"/>
+                <!-- 3. 잔디 언덕 (나무 위, 거북이 아래) -->
+                <svg width="546" height="155" viewBox="0 0 546 154.711" style="position:absolute; left:-86px; top:208.5px; pointer-events:none;" xmlns="http://www.w3.org/2000/svg">
+                  <defs><linearGradient id="gh3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgb(180,209,92)"/><stop offset="100%" stop-color="rgb(247,247,247)"/></linearGradient></defs>
+                  <path d="M546 75.4C546 96.92 518.357 143.379 466 151.384C417.045 158.869 345.855 151.384 273 151.384C200.145 151.384 130.455 158.869 81.5 151.384C29.143 143.379 0 96.92 0 75.4C0 33.758 122.226 0 273 0C423.774 0 546 33.758 546 75.4Z" fill="url(#gh3)"/>
+                </svg>
+                <!-- 4. 그림자 (거북이 움직임에 따라 스케일) -->
+                <div class="anim-shadow" style="position:absolute; left:144px; top:216.5px; width:87px; height:17px; border-radius:50%; background:rgb(129,121,106); opacity:0.2; pointer-events:none;"></div>
+                <!-- 5. 거북이 -->
+                <img src="assets/turtle-hero.png" class="anim-turtle" style="position:absolute; left:118px; top:41.5px; width:137px; height:185px; object-fit:contain; pointer-events:none;"/>
+                <!-- 6. 구름들 (최상단) -->
+                <img src="assets/cloud-large.png" class="anim-cloud-r" style="position:absolute; left:-41px; top:41.5px; width:149px; height:149px; object-fit:cover; pointer-events:none;"/>
+                <img src="assets/cloud-small.png" class="anim-cloud-r2" style="position:absolute; left:269px; top:-13.5px; width:130px; height:130px; object-fit:cover; pointer-events:none;"/>
+              </div>
+            </div>
+            <!-- Level progress card - 피그마 스펙 HTML + SVG 프로그레스 바만 crop -->
+            <div style="margin:-32px 24px 0; position:relative; z-index:3; background:white; border-radius:12px; padding:12px 16px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <!-- 상단: Lv.3 거북이 -->
+              <div style="margin-bottom:6px;">
+                <span style="font-family:'Pretendard Variable','Noto Sans KR',sans-serif; font-size:16px; font-weight:600; color:rgb(86,210,255); letter-spacing:-0.03em; line-height:1.4;">Lv.3 거북이</span>
+              </div>
+              <!-- 프로그레스 바 + % (같은 행) -->
+              <div style="display:flex; align-items:center; gap:8px;">
+                <svg width="252" height="18" viewBox="32 56 252 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="pb_grad" x1="32" y1="65" x2="182" y2="65" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#BCEDFF"></stop>
+                      <stop offset="1" stop-color="#1AC2FF"></stop>
+                    </linearGradient>
+                  </defs>
+                  <rect x="32" y="56" width="252" height="18" rx="9" fill="#EEF0EE"></rect>
+                  <rect x="32" y="56" width="150" height="18" rx="9" fill="url(#pb_grad)" style="transform-origin:32px 65px; animation-name:{{ pbAnim }}; animation-duration:1s; animation-timing-function:cubic-bezier(.25,.46,.45,.94); animation-fill-mode:both; animation-delay:0.2s;"></rect>
+                  <circle cx="42" cy="65" r="5" fill="white" stroke="#BCEDFF" stroke-width="2"></circle>
+                  <circle cx="100" cy="65" r="5" fill="white" stroke="#BCEDFF" stroke-width="2"></circle>
+                  <circle cx="158" cy="65" r="5" fill="white" stroke="#BCEDFF" stroke-width="2"></circle>
+                  <circle cx="216" cy="65" r="5" fill="white" stroke="#EEF0EE" stroke-width="2"></circle>
+                  <circle cx="274" cy="65" r="5" fill="white" stroke="#EEF0EE" stroke-width="2"></circle>
+                </svg>
+                <span style="font-family:'Pretendard Variable','Noto Sans KR',sans-serif; font-size:16px; font-weight:600; color:rgb(101,107,103); letter-spacing:-0.03em; line-height:1.4; white-space:nowrap;">60%</span>
+              </div>
+            </div>
+            <!-- Weekly progress - 피그마 스펙 카드 + SVG 차트 영역 crop -->
+            <div style="margin:16px 24px 0; background:white; border-radius:12px; padding:16px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="font-family:'Pretendard Variable','Noto Sans KR',sans-serif; font-size:16px; font-weight:600; color:rgb(101,107,103); letter-spacing:-0.03em; line-height:1.4; margin-bottom:22px;">이번주 퀘스트 달성률</div>
+              <!-- 바 차트: 피그마 스펙 (bar width:12px, label:12px, 영문 요일) -->
+              <div style="display:flex; justify-content:space-between; align-items:flex-end; height:141px;">
+                <!-- Mon (past, gray, 80%) -->
+                <div style="width:24px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <div style="position:relative; width:12px; height:120px; background:rgb(238,240,238); border-radius:999px; overflow:hidden;">
+                    <div class="bar-fill" style="position:absolute; top:24px; left:0; right:0; bottom:0; background:linear-gradient(180deg,rgb(185,194,188),rgb(155,163,158)); border-radius:999px; animation-name:{{ barAnim }}; animation-delay:0s;"></div>
+                  </div>
+                  <span style="font-size:12px; color:rgb(168,178,171); letter-spacing:-0.03em; text-align:center; width:24px;">Mon</span>
+                </div>
+                <!-- Tue (past, gray, 67%) -->
+                <div style="width:24px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <div style="position:relative; width:12px; height:120px; background:rgb(238,240,238); border-radius:999px; overflow:hidden;">
+                    <div class="bar-fill" style="position:absolute; top:40px; left:0; right:0; bottom:0; background:linear-gradient(180deg,rgb(185,194,188),rgb(155,163,158)); border-radius:999px; animation-name:{{ barAnim }}; animation-delay:0.12s;"></div>
+                  </div>
+                  <span style="font-size:12px; color:rgb(168,178,171); letter-spacing:-0.03em; text-align:center; width:24px;">Tue</span>
+                </div>
+                <!-- Wed (past, gray, 100%) -->
+                <div style="width:24px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <div style="position:relative; width:12px; height:120px; background:rgb(238,240,238); border-radius:999px; overflow:hidden;">
+                    <div class="bar-fill" style="position:absolute; top:0; left:0; right:0; bottom:0; background:linear-gradient(180deg,rgb(185,194,188),rgb(155,163,158)); border-radius:999px; animation-name:{{ barAnim }}; animation-delay:0.24s;"></div>
+                  </div>
+                  <span style="font-size:12px; color:rgb(168,178,171); letter-spacing:-0.03em; text-align:center; width:24px;">Wed</span>
+                </div>
+                <!-- Thu (today, primary blue, 80%) -->
+                <div style="width:24px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <div style="position:relative; width:12px; height:120px; background:rgb(238,240,238); border-radius:999px; overflow:hidden;">
+                    <div class="bar-fill" style="position:absolute; top:24px; left:0; right:0; bottom:0; background:linear-gradient(180deg,rgb(188,237,255),rgb(26,194,255)); border-radius:999px; animation-name:{{ barAnim }}; animation-delay:0.36s;"></div>
+                  </div>
+                  <span style="font-size:12px; font-weight:600; color:rgb(86,210,255); letter-spacing:-0.03em; text-align:center; width:24px;">Thu</span>
+                </div>
+                <!-- Fri (future, empty) -->
+                <div style="width:24px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <div style="width:12px; height:120px; background:rgb(238,240,238); border-radius:999px;"></div>
+                  <span style="font-size:12px; color:rgb(168,178,171); letter-spacing:-0.03em; text-align:center; width:24px;">Fri</span>
+                </div>
+                <!-- Sat (future, empty) -->
+                <div style="width:24px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <div style="width:12px; height:120px; background:rgb(238,240,238); border-radius:999px;"></div>
+                  <span style="font-size:12px; color:rgb(168,178,171); letter-spacing:-0.03em; text-align:center; width:24px;">Sat</span>
+                </div>
+                <!-- Sun (future, empty) -->
+                <div style="width:24px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <div style="width:12px; height:120px; background:rgb(238,240,238); border-radius:999px;"></div>
+                  <span style="font-size:12px; color:rgb(168,178,171); letter-spacing:-0.03em; text-align:center; width:24px;">Sun</span>
+                </div>
+              </div>
+            </div>
+            <!-- Daily quests -->
+            <div style="margin:16px 24px 0;">
+              <div style="font-family:'Pretendard Variable','Noto Sans KR',sans-serif; font-size:16px; font-weight:600; color:rgb(101,107,103); letter-spacing:-0.03em; line-height:1.4; margin-bottom:12px;">오늘의 자세 교정 퀘스트</div>
+              <div style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05);">
+                <div style="display:flex; align-items:center; gap:16px; padding:12px 16px;">
+                  <div style="width:32px; height:32px; border-radius:4px; background:linear-gradient(135deg,rgb(255,235,162),rgb(255,221,99)); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <svg width="20" height="14" viewBox="0 0 20 14" fill="white"><path d="M16.125 5.033C15.845 3.615 15.081 2.337 13.964 1.419C12.847.501 11.446 0 10 0C7.592 0 5.5 1.367 4.458 3.367C3.234 3.499 2.101 4.079 1.278 4.996C.455 5.913 0 7.101 0 8.333C0 11.092 2.242 13.333 5 13.333H15.833C18.133 13.333 20 11.467 20 9.167C20 6.967 18.292 5.183 16.125 5.033Z"/></svg>
+                  </div>
+                  <div style="flex:1;"><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">하늘 올려다보기</div><div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em;">20초간 진행</div></div>
+                  <svg width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div style="height:1px; background:rgb(238,240,238); margin:0 16px;"></div>
+                <div style="display:flex; align-items:center; gap:16px; padding:12px 16px;">
+                  <div style="width:32px; height:32px; border-radius:4px; background:linear-gradient(135deg,rgb(255,235,162),rgb(255,221,99)); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <svg width="20" height="16" viewBox="0 0 20 16" fill="white"><path d="M18 0H2C.9 0 0 .9 0 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V2l8 5 8-5v2z"/></svg>
+                  </div>
+                  <div style="flex:1;"><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">좌우 살피기</div><div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em;">10초간 진행</div></div>
+                  <svg width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+            <div style="height:24px;"></div>
+          </div>
+          <!-- Nav placeholder -->
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: FRIENDS
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_friends }}; pointer-events:{{ pe_friends }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <!-- Header -->
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid rgb(238,240,238); background:rgb(247,247,247);">
+              <div style="font-size:24px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">친구</div>
+              <div class="tappable" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoNotifications }}">
+                <svg width="20" height="22" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              </div>
+            </div>
+            <!-- Search bar -->
+            <div style="padding:16px 24px;">
+              <div class="tappable" style="height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; gap:8px; padding:0 12px;" onClick="{{ gotoFriendSearch }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)" style="flex-shrink:0;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <span style="font-size:14px; color:rgb(185,194,188); letter-spacing:-0.03em; pointer-events:none;">닉네임을 검색해 보세요</span>
+              </div>
+            </div>
+            <!-- Friend rows -->
+            <!-- Alex Johnson -->
+            <div style="background:{{ alexRowBg }}; transition:background .15s;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <img src="uploads/Background.svg" style="width:48px; height:48px; border-radius:9999px; flex-shrink:0;"/>
+                  <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Alex Johnson</div><div style="font-size:12px; color:rgb(134,143,137);">Last active 2h ago</div></div>
+                </div>
+                <div class="tappable" style="height:44px; padding:0 12px; border-radius:8px; display:flex; align-items:center; gap:6px; background:{{ alexBg }}; box-shadow:{{ alexSh }}; flex-shrink:0;" onClick="{{ sendAlex }}">
+                  <svg width="12" height="14" viewBox="0 0 24 24" fill="{{ alexFg }}"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                  <span style="font-size:14px; font-weight:600; color:{{ alexFg }}; white-space:nowrap;">알림보내기</span>
+                </div>
+              </div>
+              <!-- 인라인 확장 카드 -->
+              <div style="display:{{ alexExpand }}; gap:8px; padding:0 24px 16px;">
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ alexCard1Bg }}; box-shadow:{{ alexCard1Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ alexOpt1 }}">
+                  <svg width="18" height="14" viewBox="0 0 24 18" fill="{{ alexCard1Fg }}"><path d="M4 14h7v-2H4v2zm0-4h9V8H4v2zm0-4h9V4H4v2zm11 10v-3h3v-2h-3v-3l-4 4 4 4z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ alexCard1Fg }}; letter-spacing:-0.03em;">{{ alexCard1Label }}</span>
+                </div>
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ alexCard2Bg }}; box-shadow:{{ alexCard2Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ alexOpt2 }}">
+                  <svg width="12" height="16" viewBox="0 0 14 20" fill="{{ alexCard2Fg }}"><path d="M7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm4 5H3L1 13h2l1 7h6l1-7h2L11 5z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ alexCard2Fg }}; letter-spacing:-0.03em;">{{ alexCard2Label }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- Sarah Miller -->
+            <div style="background:{{ sarahRowBg }}; border-top:1px solid rgb(249,250,251); border-bottom:1px solid rgb(249,250,251); transition:background .15s;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div style="width:48px; height:48px; border-radius:9999px; background:url(assets/friend-sarah.jpg) center/cover; flex-shrink:0; box-shadow:inset 0 0 0 1px rgba(0,0,0,0.06);"></div>
+                  <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Sarah Miller</div><div style="font-size:12px; color:rgb(134,143,137);">Active now</div></div>
+                </div>
+                <div class="tappable" style="height:44px; padding:0 12px; border-radius:8px; display:flex; align-items:center; gap:6px; background:{{ sarahBg }}; box-shadow:{{ sarahSh }}; flex-shrink:0;" onClick="{{ sendSarah }}">
+                  <svg width="12" height="14" viewBox="0 0 24 24" fill="{{ sarahFg }}"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                  <span style="font-size:14px; font-weight:600; color:{{ sarahFg }}; white-space:nowrap;">알림보내기</span>
+                </div>
+              </div>
+              <div style="display:{{ sarahExpand }}; gap:8px; padding:0 24px 16px;">
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ sarahCard1Bg }}; box-shadow:{{ sarahCard1Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ sarahOpt1 }}">
+                  <svg width="18" height="14" viewBox="0 0 24 18" fill="{{ sarahCard1Fg }}"><path d="M4 14h7v-2H4v2zm0-4h9V8H4v2zm0-4h9V4H4v2zm11 10v-3h3v-2h-3v-3l-4 4 4 4z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ sarahCard1Fg }}; letter-spacing:-0.03em;">{{ sarahCard1Label }}</span>
+                </div>
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ sarahCard2Bg }}; box-shadow:{{ sarahCard2Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ sarahOpt2 }}">
+                  <svg width="12" height="16" viewBox="0 0 14 20" fill="{{ sarahCard2Fg }}"><path d="M7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm4 5H3L1 13h2l1 7h6l1-7h2L11 5z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ sarahCard2Fg }}; letter-spacing:-0.03em;">{{ sarahCard2Label }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- Jordan Lee -->
+            <div style="background:{{ jordanRowBg }}; border-bottom:1px solid rgb(238,240,238); transition:background .15s;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <img src="uploads/Background.svg" style="width:48px; height:48px; border-radius:9999px; flex-shrink:0;"/>
+                  <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Jordan Lee</div><div style="font-size:12px; color:rgb(134,143,137);">Last active 5m ago</div></div>
+                </div>
+                <div class="tappable" style="height:44px; padding:0 12px; border-radius:8px; display:flex; align-items:center; gap:6px; background:{{ jordanBg }}; box-shadow:{{ jordanSh }}; flex-shrink:0;" onClick="{{ sendJordan }}">
+                  <svg width="12" height="14" viewBox="0 0 24 24" fill="{{ jordanFg }}"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                  <span style="font-size:14px; font-weight:600; color:{{ jordanFg }}; white-space:nowrap;">알림보내기</span>
+                </div>
+              </div>
+              <div style="display:{{ jordanExpand }}; gap:8px; padding:0 24px 16px;">
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ jordanCard1Bg }}; box-shadow:{{ jordanCard1Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ jordanOpt1 }}">
+                  <svg width="18" height="14" viewBox="0 0 24 18" fill="{{ jordanCard1Fg }}"><path d="M4 14h7v-2H4v2zm0-4h9V8H4v2zm0-4h9V4H4v2zm11 10v-3h3v-2h-3v-3l-4 4 4 4z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ jordanCard1Fg }}; letter-spacing:-0.03em;">{{ jordanCard1Label }}</span>
+                </div>
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ jordanCard2Bg }}; box-shadow:{{ jordanCard2Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ jordanOpt2 }}">
+                  <svg width="12" height="16" viewBox="0 0 14 20" fill="{{ jordanCard2Fg }}"><path d="M7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm4 5H3L1 13h2l1 7h6l1-7h2L11 5z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ jordanCard2Fg }}; letter-spacing:-0.03em;">{{ jordanCard2Label }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- Casey Wright -->
+            <div style="background:{{ caseyRowBg }}; border-bottom:1px solid rgb(238,240,238); transition:background .15s;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <img src="uploads/Background.svg" style="width:48px; height:48px; border-radius:9999px; flex-shrink:0;"/>
+                  <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Casey Wright</div><div style="font-size:12px; color:rgb(134,143,137);">Away</div></div>
+                </div>
+                <div class="tappable" style="height:44px; padding:0 12px; border-radius:8px; display:flex; align-items:center; gap:6px; background:{{ caseyBg }}; box-shadow:{{ caseySh }}; flex-shrink:0;" onClick="{{ sendCasey }}">
+                  <svg width="12" height="14" viewBox="0 0 24 24" fill="{{ caseyFg }}"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                  <span style="font-size:14px; font-weight:600; color:{{ caseyFg }}; white-space:nowrap;">알림보내기</span>
+                </div>
+              </div>
+              <div style="display:{{ caseyExpand }}; gap:8px; padding:0 24px 16px;">
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ caseyCard1Bg }}; box-shadow:{{ caseyCard1Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ caseyOpt1 }}">
+                  <svg width="18" height="14" viewBox="0 0 24 18" fill="{{ caseyCard1Fg }}"><path d="M4 14h7v-2H4v2zm0-4h9V8H4v2zm0-4h9V4H4v2zm11 10v-3h3v-2h-3v-3l-4 4 4 4z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ caseyCard1Fg }}; letter-spacing:-0.03em;">{{ caseyCard1Label }}</span>
+                </div>
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ caseyCard2Bg }}; box-shadow:{{ caseyCard2Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ caseyOpt2 }}">
+                  <svg width="12" height="16" viewBox="0 0 14 20" fill="{{ caseyCard2Fg }}"><path d="M7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm4 5H3L1 13h2l1 7h6l1-7h2L11 5z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ caseyCard2Fg }}; letter-spacing:-0.03em;">{{ caseyCard2Label }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- Elena Rodriguez -->
+            <div style="background:{{ elenaRowBg }}; transition:background .15s;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <img src="uploads/Background.svg" style="width:48px; height:48px; border-radius:9999px; flex-shrink:0;"/>
+                  <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Elena Rodriguez</div><div style="font-size:12px; color:rgb(134,143,137);">Last active 1d ago</div></div>
+                </div>
+                <div class="tappable" style="height:44px; padding:0 12px; border-radius:8px; display:flex; align-items:center; gap:6px; background:{{ elenaBg }}; box-shadow:{{ elenaSh }}; flex-shrink:0;" onClick="{{ sendElena }}">
+                  <svg width="12" height="14" viewBox="0 0 24 24" fill="{{ elenaFg }}"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                  <span style="font-size:14px; font-weight:600; color:{{ elenaFg }}; white-space:nowrap;">알림보내기</span>
+                </div>
+              </div>
+              <div style="display:{{ elenaExpand }}; gap:8px; padding:0 24px 16px;">
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ elenaCard1Bg }}; box-shadow:{{ elenaCard1Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ elenaOpt1 }}">
+                  <svg width="18" height="14" viewBox="0 0 24 18" fill="{{ elenaCard1Fg }}"><path d="M4 14h7v-2H4v2zm0-4h9V8H4v2zm0-4h9V4H4v2zm11 10v-3h3v-2h-3v-3l-4 4 4 4z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ elenaCard1Fg }}; letter-spacing:-0.03em;">{{ elenaCard1Label }}</span>
+                </div>
+                <div class="tappable" style="flex:1; height:62px; border-radius:8px; background:{{ elenaCard2Bg }}; box-shadow:{{ elenaCard2Sh }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;" onClick="{{ elenaOpt2 }}">
+                  <svg width="12" height="16" viewBox="0 0 14 20" fill="{{ elenaCard2Fg }}"><path d="M7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm4 5H3L1 13h2l1 7h6l1-7h2L11 5z"/></svg>
+                  <span style="font-size:13px; font-weight:600; color:{{ elenaCard2Fg }}; letter-spacing:-0.03em;">{{ elenaCard2Label }}</span>
+                </div>
+              </div>
+            </div>
+            <div style="height:16px;"></div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: FRIENDS EMPTY
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_friends_empty }}; pointer-events:{{ pe_friends_empty }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid rgb(238,240,238);">
+              <div style="font-size:24px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">친구</div>
+              <div style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;">
+                <svg width="20" height="22" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              </div>
+            </div>
+            <div style="padding:16px 24px;">
+              <div class="tappable" style="height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; gap:8px; padding:0 12px;" onClick="{{ gotoFriendSearch }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)" style="flex-shrink:0;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <span style="font-size:14px; color:rgb(185,194,188); letter-spacing:-0.03em; pointer-events:none;">닉네임을 검색해 보세요</span>
+              </div>
+            </div>
+            <!-- Empty state -->
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px; text-align:center;">
+              <img src="uploads/image 71-5bd2cf28.png" style="width:180px; height:180px; object-fit:contain; margin-bottom:24px;" alt="turtle"/>
+              <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; margin-bottom:8px;">아직 친구를 추가하지 않았어요</div>
+              <div style="font-size:16px; color:rgb(185,194,188); letter-spacing:-0.03em; margin-bottom:32px;">친구를 추가하고 스트레칭 알림을 보내보세요.</div>
+              <div class="tappable" style="width:150px; height:44px; background:rgb(86,210,255); border-radius:8px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoContactPopup }}">
+                <span style="font-size:14px; font-weight:600; color:white; letter-spacing:-0.03em;">연락처 연동하기</span>
+              </div>
+
+            </div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: CONTACT POPUP (modal over empty)
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_contact_popup }}; pointer-events:{{ pe_contact_popup }}; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:50;">
+          <div style="width:311px; background:white; border-radius:12px; padding:24px; display:flex; flex-direction:column; align-items:center; gap:16px;">
+            <img src="uploads/Frame 80-26f55f9f.png" style="width:110px; height:110px; object-fit:contain;" alt="turtle"/>
+            <div style="text-align:center;">
+              <div style="font-size:20px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em; margin-bottom:8px;">연락처를 연동하시겠습니까?</div>
+              <div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em; line-height:1.5;">연락처를 연동하여 이미 가입한<br>친구를 찾을 수 있습니다.</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px; width:100%; margin-top:8px;">
+              <div class="tappable" style="width:100%; height:48px; background:rgb(86,210,255); border-radius:8px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoContactList }}">
+                <span style="font-size:14px; font-weight:600; color:white;">허용</span>
+              </div>
+              <div class="tappable" style="width:100%; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoBackToFriendsEmpty }}">
+                <span style="font-size:14px; font-weight:500; color:rgb(134,143,137);">허용하지 않음</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: CONTACT LIST (G-2_4)
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_contact_list }}; pointer-events:{{ pe_contact_list }}; background:rgb(247,247,247);">
+          <div class="scroll">
+            <div class="status-spacer"></div>
+            <div style="display:flex; align-items:center; justify-content:center; position:relative; padding:16px; border-bottom:1px solid rgb(238,240,238); background:white;">
+              <div class="tappable" style="position:absolute; left:16px; width:24px; height:24px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoBackToFriendSearch }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+              <span style="font-size:20px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">연락처 연동</span>
+            </div>
+            <div style="padding:24px 24px 8px;">
+              <div style="font-size:16px; font-weight:600; color:rgb(17,24,39); letter-spacing:-0.03em; margin-bottom:4px;">연락처에 있는 친구를 확인해 보세요</div>
+              <div style="font-size:14px; color:rgb(185,194,188); letter-spacing:-0.03em;">버튼을 눌러 추가할 친구를 선택할 수 있습니다.</div>
+            </div>
+            <!-- Contact rows -->
+            <div style="background:white; margin:8px 0;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid rgb(238,240,238);">
+                <div style="display:flex; align-items:center; gap:12px;"><img src="uploads/Background.svg" style="width:44px; height:44px; border-radius:9999px;"/><div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Alex Johnson</div><div style="font-size:12px; color:rgb(185,194,188);">@alexj</div></div></div>
+                <div class="tappable" style="height:36px; padding:0 16px; border-radius:6px; background:{{ ct1Bg }}; box-shadow:{{ ct1Sh }}; display:flex; align-items:center;" onClick="{{ addContact1 }}"><span style="font-size:13px; font-weight:600; color:{{ ct1Fg }};">{{ ct1Label }}</span></div>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid rgb(238,240,238);">
+                <div style="display:flex; align-items:center; gap:12px;"><div style="width:44px; height:44px; border-radius:9999px; background:url(assets/friend-sarah.jpg) center/cover;"></div><div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Sarah Miller</div><div style="font-size:12px; color:rgb(185,194,188);">@sarahm</div></div></div>
+                <div class="tappable" style="height:36px; padding:0 16px; border-radius:6px; background:{{ ct2Bg }}; box-shadow:{{ ct2Sh }}; display:flex; align-items:center;" onClick="{{ addContact2 }}"><span style="font-size:13px; font-weight:600; color:{{ ct2Fg }};">{{ ct2Label }}</span></div>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid rgb(238,240,238);">
+                <div style="display:flex; align-items:center; gap:12px;"><img src="uploads/Background.svg" style="width:44px; height:44px; border-radius:9999px;"/><div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Michael Chen</div><div style="font-size:12px; color:rgb(185,194,188);">@mikechen</div></div></div>
+                <div class="tappable" style="height:36px; padding:0 16px; border-radius:6px; background:{{ ct3Bg }}; box-shadow:{{ ct3Sh }}; display:flex; align-items:center;" onClick="{{ addContact3 }}"><span style="font-size:13px; font-weight:600; color:{{ ct3Fg }};">{{ ct3Label }}</span></div>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid rgb(238,240,238);">
+                <div style="display:flex; align-items:center; gap:12px;"><img src="uploads/Background.svg" style="width:44px; height:44px; border-radius:9999px;"/><div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Jessica Wong</div><div style="font-size:12px; color:rgb(185,194,188);">@jesswong</div></div></div>
+                <div class="tappable" style="height:36px; padding:0 16px; border-radius:6px; background:{{ ct4Bg }}; box-shadow:{{ ct4Sh }}; display:flex; align-items:center;" onClick="{{ addContact4 }}"><span style="font-size:13px; font-weight:600; color:{{ ct4Fg }};">{{ ct4Label }}</span></div>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid rgb(238,240,238);">
+                <div style="display:flex; align-items:center; gap:12px;"><img src="uploads/Background.svg" style="width:44px; height:44px; border-radius:9999px;"/><div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">David Smith</div><div style="font-size:12px; color:rgb(185,194,188);">@davidsmith</div></div></div>
+                <div class="tappable" style="height:36px; padding:0 16px; border-radius:6px; background:{{ ct5Bg }}; box-shadow:{{ ct5Sh }}; display:flex; align-items:center;" onClick="{{ addContact5 }}"><span style="font-size:13px; font-weight:600; color:{{ ct5Fg }};">{{ ct5Label }}</span></div>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 24px;">
+                <div style="display:flex; align-items:center; gap:12px;"><img src="uploads/Background.svg" style="width:44px; height:44px; border-radius:9999px;"/><div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Elena Rodriguez</div><div style="font-size:12px; color:rgb(185,194,188);">@elenar</div></div></div>
+                <div class="tappable" style="height:36px; padding:0 16px; border-radius:6px; background:{{ ct6Bg }}; box-shadow:{{ ct6Sh }}; display:flex; align-items:center;" onClick="{{ addContact6 }}"><span style="font-size:13px; font-weight:600; color:{{ ct6Fg }};">{{ ct6Label }}</span></div>
+              </div>
+            </div>
+            <div style="height:32px;"></div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: FRIEND SEARCH (G-2_1)
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_friend_search }}; pointer-events:{{ pe_friend_search }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <div style="display:flex; align-items:center; gap:16px; padding:16px; border-bottom:1px solid rgb(238,240,238);">
+              <div class="tappable" style="width:24px; height:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0;" onClick="{{ gotoBackToFriends }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+              <div style="font-size:24px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">검색</div>
+            </div>
+            <div style="padding:16px 24px;">
+              <div id="searchWrap" style="height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; gap:8px; padding:0 12px;" onClick="this.querySelector('input').focus()">
+                <svg id="searchIcon" width="16" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)" style="flex-shrink:0;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" placeholder="닉네임을 검색해 보세요"
+                  onFocus="document.getElementById('searchWrap').style.boxShadow='inset 0 0 0 2px rgb(86,210,255)';document.getElementById('searchIcon').setAttribute('fill','rgb(86,210,255)')"
+                  onBlur="document.getElementById('searchWrap').style.boxShadow='inset 0 0 0 1px rgb(238,240,238)';document.getElementById('searchIcon').setAttribute('fill','rgb(185,194,188)')"
+                  onInput="{{ onSearchInput }}"
+                  onKeyDown="{{ onSearchKeyDown }}"
+                  style="flex:1; border:none; outline:none; font-size:14px; color:rgb(34,34,34); font-family:'Pretendard Variable','Noto Sans KR',sans-serif; background:transparent;"/>
+              </div>
+            </div>
+            <!-- Recent searches -->
+            <div style="padding:0 24px;">
+              <div style="font-size:14px; font-weight:600; color:rgb(168,178,171); margin-bottom:8px;">최근 검색</div>
+              <div style="display:flex; align-items:center; gap:16px; padding:16px 0; border-bottom:1px solid rgb(238,240,238);">
+                <div style="width:32px; height:32px; background:rgb(221,246,255); border-radius:9999px; overflow:hidden;"><img src="uploads/Background.svg" style="width:32px; height:32px;"/></div>
+                <span style="font-size:16px; color:rgb(101,107,103); letter-spacing:-0.03em;">Alex Johnson</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:16px; padding:16px 0;">
+                <div style="width:32px; height:32px; background:rgb(221,246,255); border-radius:9999px; overflow:hidden;"><img src="uploads/Background.svg" style="width:32px; height:32px;"/></div>
+                <span style="font-size:16px; color:rgb(101,107,103); letter-spacing:-0.03em;">Sarah Miller</span>
+              </div>
+            </div>
+            <!-- Empty state hint -->
+            <div style="display:flex; flex-direction:column; align-items:center; padding:40px 24px;">
+              <img src="uploads/image 70.png" style="width:180px; height:180px; object-fit:contain; margin-bottom:16px;" alt="turtle"/>
+              <div style="font-size:16px; font-weight:600; color:rgb(134,143,137); text-align:center; margin-bottom:4px;">친구를 추가해보세요</div>
+              <div style="font-size:14px; color:rgb(185,194,188); text-align:center;">추가할 친구의 ID를 검색해 보세요.</div>
+            </div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: FRIEND SEARCH RESULTS (G-2_2)
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_friend_search_results }}; pointer-events:{{ pe_friend_search_results }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <div style="display:flex; align-items:center; gap:16px; padding:16px; border-bottom:1px solid rgb(238,240,238);">
+              <div class="tappable" style="width:24px; height:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0;" onClick="{{ gotoFriendSearch }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+              <div style="font-size:24px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">검색</div>
+            </div>
+            <div style="padding:16px 24px;">
+              <div style="height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 2px rgb(120,219,255); display:flex; align-items:center; gap:8px; padding:0 16px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="rgb(86,210,255)" style="flex-shrink:0;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" placeholder="닉네임을 검색해 보세요" value="{{ searchQuery }}" onInput="{{ onSearchInput }}" onKeyDown="{{ onSearchKeyDown }}" style="flex:1; border:none; outline:none; font-size:14px; color:rgb(34,34,34); font-family:'Pretendard Variable','Noto Sans KR',sans-serif; background:transparent;"/>
+                <div class="tappable" style="padding:4px;" onClick="{{ gotoFriendSearch }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </div>
+              </div>
+            </div>
+            <div style="padding:0 24px;">
+              <div style="font-size:14px; font-weight:600; color:rgb(168,178,171); margin-bottom:8px;">{{ searchResultLabel }}</div>
+              <div style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05); padding:0 16px;">
+                {{ searchResultsEl }}
+              </div>
+            </div>
+            <div style="height:24px;"></div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: TIMELINE / 기록 (H)
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_timeline }}; pointer-events:{{ pe_timeline }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid rgb(238,240,238); background:rgb(247,247,247);">
+              <div style="font-size:24px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">자세 기록</div>
+              <div class="tappable" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoNotifications }}">
+                <svg width="20" height="22" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              </div>
+            </div>
+            <!-- Today's achievement section -->
+            <div style="padding:16px 24px 0;">
+              <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; margin-bottom:16px;">오늘의 퀘스트 달성률</div>
+              <!-- Achievement ring: 피그마 스펙 정확히 재현 -->
+              <div style="display:flex; justify-content:center; margin-bottom:16px;">
+                <div style="position:relative; width:233px; height:233px; flex-shrink:0;">
+                  <svg width="233" height="233" viewBox="0 0 233 233" fill="none" style="display:block; overflow:visible;">
+                    <defs>
+                      <linearGradient id="arcGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgb(188,237,255)"/>
+                        <stop offset="50%" stop-color="rgb(86,210,255)"/>
+                        <stop offset="100%" stop-color="rgb(26,194,255)"/>
+                      </linearGradient>
+                    </defs>
+                    <!-- 외부 글로우 원: 233×233, opacity:0.5 -->
+                    <circle cx="116.5" cy="116.5" r="116.5" fill="rgb(221,246,255)" opacity="0.5"/>
+                    <!-- 내부 글로우 원: 192×192, left:20.5 top:20 → cx:116.5, cy:116, r:96, opacity:0.9 -->
+                    <circle cx="116.5" cy="116" r="96" fill="rgb(221,246,255)" opacity="0.9"/>
+                    <!-- 진행 원호: stroke-width:10, r:96, 두 글로우 원 중앙에 위치 -->
+                    <circle cx="116.5" cy="116" r="96"
+                      stroke="url(#arcGrad)" stroke-width="10" fill="none"
+                      stroke-linecap="round"
+                      stroke-dasharray="603.2" stroke-dashoffset="603.2"
+                      transform="rotate(-90 116.5 116)"
+                      style="animation: {{ ringAnim }} cubic-bezier(0.25,0.46,0.45,0.94) 0.3s both;"/>
+                    <!-- 흰 중앙 원: 142×142, left:46 top:45 → cx:117, cy:116, r:71 -->
+                    <circle cx="117" cy="116" r="71" fill="white" style="filter:drop-shadow(0 0 10px rgba(0,0,0,0.1));"/>
+                  </svg>
+                  <!-- HTML 텍스트: 피그마 스펙 그대로 left:46 top:45, 142×142 -->
+                  <div style="position:absolute; left:46px; top:45px; width:142px; height:142px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; pointer-events:none;">
+                    <div style="position:relative; width:71px; height:60px; flex-shrink:0;">
+                      <span style="position:absolute; left:0; top:0; font-size:32px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; line-height:1; font-family:'Pretendard Variable',sans-serif; white-space:nowrap;">84%</span>
+                      <span style="position:absolute; left:1.5px; top:38px; font-size:16px; color:rgb(134,143,137); letter-spacing:-0.03em; font-family:'Pretendard Variable',sans-serif; white-space:nowrap;">달성했어요</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:2px; margin-top:10px;">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M 6.122 1.61 C 6.501 0.915 7.499 0.915 7.878 1.61 L 8.953 3.582 C 9.097 3.846 9.352 4.031 9.647 4.086 L 11.855 4.499 C 12.633 4.645 12.942 5.594 12.398 6.169 L 10.855 7.802 C 10.648 8.02 10.551 8.319 10.59 8.617 L 10.879 10.845 C 10.98 11.63 10.173 12.216 9.458 11.877 L 7.429 10.914 C 7.157 10.785 6.843 10.785 6.571 10.914 L 4.542 11.877 C 3.827 12.216 3.02 11.63 3.121 10.845 L 3.41 8.617 C 3.449 8.319 3.352 8.02 3.145 7.802 L 1.602 6.169 C 1.058 5.594 1.367 4.645 2.145 4.499 L 4.353 4.086 C 4.648 4.031 4.903 3.846 5.047 3.582 L 6.122 1.61 Z" fill="rgb(86,210,255)" fill-rule="nonzero"/></svg>
+                      <span style="font-size:12px; color:rgb(86,210,255); letter-spacing:-0.03em; font-family:'Pretendard Variable',sans-serif;">2/3 완료</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Stats row -->
+              <div style="display:flex; gap:16px; margin-bottom:16px;">
+                <div style="flex:1; background:white; border-radius:12px; padding:14px 16px; box-shadow:inset 0 0 0 1px rgb(221,246,255), 0 0 16px rgba(0,0,0,.05);">
+                  <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px;">
+                    <svg width="14" height="16" viewBox="0 0 12 16" fill="rgb(168,178,171)"><path d="M6 16c3.314 0 6-2 6-5.5C12 9 11.5 6.5 9.5 4.5 9.75 6 8.25 6.5 8.25 6.5 9 4 7 .5 4 0c.357 2 .5 4-2 6C.75 7 0 8.729 0 10.5 0 14 2.686 16 6 16zM6 15c-1.657 0-3-1-3-2.75C3 11.5 3.25 10.25 4.25 9.25 4.125 10 5 10.5 5 10.5 4.625 9.25 5.5 7.25 7 7c-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C9 14 7.657 15 6 15z"/></svg>
+                    <span style="font-size:14px; color:rgb(134,143,137);">연속 달성</span>
+                  </div>
+                  <div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">12일</div>
+                </div>
+                <div style="flex:1; background:white; border-radius:12px; padding:14px 16px; box-shadow:inset 0 0 0 1px rgb(221,246,255), 0 0 16px rgba(0,0,0,.05);">
+                  <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px;">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="rgb(168,178,171)"><path d="M12.444 0H1.556C.7 0 0 .7 0 1.556v10.888C0 13.3.7 14 1.556 14h10.888C13.3 14 14 13.3 14 12.444V1.556C14 .7 13.3 0 12.444 0zM4.667 10.889H3.11V5.444h1.556v5.445zm3.111 0H6.222V3.111h1.556v7.778zm3.111 0H9.333V7.778h1.556v3.111z"/></svg>
+                    <span style="font-size:14px; color:rgb(134,143,137);">주간 평균</span>
+                  </div>
+                  <div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">87%</div>
+                </div>
+              </div>
+            </div>
+            <!-- Today's quest completion list -->
+            <div style="padding:0 24px 16px; display:flex; flex-direction:column; gap:12px;">
+              <div style="background:white; border-radius:12px; padding:12px 16px; box-shadow:inset 0 0 0 1px rgb(255,221,99), 0 0 16px rgba(0,0,0,.05); display:flex; align-items:center; gap:12px;">
+                <div style="width:24px; height:24px; background:rgb(255,221,99); border-radius:999px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <svg width="9" height="7" viewBox="0 0 8.751 6.251" fill="white"><path d="M8.568.183C8.812.427 8.812.824 8.568 1.068L3.568 6.068C3.324 6.312 2.927 6.312 2.683 6.068L.183 3.568C-.061 3.324-.061 2.927.183 2.683.427 2.439.824 2.439 1.068 2.683L3.126 4.74 7.685.183C7.929-.061 8.326-.061 8.57.183L8.568.183Z"/></svg>
+                </div>
+                <div style="flex:1;"><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">하늘 올려다보기</div><div style="font-size:14px; color:rgb(168,178,171);">20초간 진행</div></div>
+                <span style="font-size:12px; color:rgb(168,178,171);">08:30 AM</span>
+              </div>
+              <div style="background:white; border-radius:12px; padding:12px 16px; box-shadow:inset 0 0 0 1px rgb(255,221,99), 0 0 16px rgba(0,0,0,.05); display:flex; align-items:center; gap:12px;">
+                <div style="width:24px; height:24px; background:rgb(255,221,99); border-radius:999px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <svg width="9" height="7" viewBox="0 0 8.751 6.251" fill="white"><path d="M8.568.183C8.812.427 8.812.824 8.568 1.068L3.568 6.068C3.324 6.312 2.927 6.312 2.683 6.068L.183 3.568C-.061 3.324-.061 2.927.183 2.683.427 2.439.824 2.439 1.068 2.683L3.126 4.74 7.685.183C7.929-.061 8.326-.061 8.57.183L8.568.183Z"/></svg>
+                </div>
+                <div style="flex:1;"><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">좌우 살피기</div><div style="font-size:14px; color:rgb(168,178,171);">10초간 진행</div></div>
+                <span style="font-size:12px; color:rgb(168,178,171);">11:15 AM</span>
+              </div>
+              <div style="background:white; border-radius:12px; padding:12px 16px; box-shadow:0 0 16px rgba(0,0,0,.05); display:flex; align-items:center; gap:12px;">
+                <div style="width:24px; height:24px; border-radius:999px; box-shadow:inset 0 0 0 2px rgb(220,224,222); flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">팔 뒤로 펴기</div><div style="font-size:14px; color:rgb(168,178,171);">30초간 진행</div></div>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C10.1217 0 12.1566 0.842855 13.6569 2.34315C15.1571 3.84344 16 5.87827 16 8C16 10.1217 15.1571 12.1566 13.6569 13.6569C12.1566 15.1571 10.1217 16 8 16C5.87827 16 3.84344 15.1571 2.34315 13.6569C0.842855 12.1566 0 10.1217 0 8C0 5.87827 0.842855 3.84344 2.34315 2.34315C3.84344 0.842855 5.87827 0 8 0ZM7.25 3.75V8C7.25 8.25 7.375 8.48438 7.58437 8.625L10.5844 10.625C10.9281 10.8562 11.3938 10.7625 11.625 10.4156C11.8562 10.0687 11.7625 9.60625 11.4156 9.375L8.75 7.6V3.75C8.75 3.33437 8.41562 3 8 3C7.58437 3 7.25 3.33437 7.25 3.75Z" fill="#A8B2AB"></path></svg>
+              </div>
+            </div>
+            <!-- Monthly section -->
+            <!-- 제목: 카드 바깥 -->
+            <div style="padding:16px 24px 12px;">
+              <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">이번달의 자세는?</div>
+            </div>
+            <!-- 일러스트 카드 (단독) -->
+            <div style="margin:0 24px 12px; border-radius:12px; overflow:hidden; box-shadow:0 0 0 1px rgb(243,244,246);">
+              <div style="position:relative; width:327px; height:265px; overflow:hidden;">
+                <!-- 배경 SVG -->
+                <img src="assets/monthly-turtle.svg" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" alt="monthly bg"/>
+                <!-- 왼쪽 구름 (image 72) -->
+                <img src="assets/monthly-cloud-s.png" style="position:absolute; left:-36px; top:34px; width:130px; height:130px; object-fit:cover; pointer-events:none;" alt="cloud left"/>
+                <!-- 오른쪽 구름 (image 71) -->
+                <img src="assets/monthly-cloud-l.png" style="position:absolute; left:235px; top:-11px; width:113px; height:113px; object-fit:cover; pointer-events:none;" alt="cloud right"/>
+                <!-- 그림자 -->
+                <div style="position:absolute; left:113px; top:225px; width:102px; height:20px; border-radius:50%; background:rgb(129,121,106); opacity:.2; pointer-events:none;"></div>
+                <!-- 거북이 캐릭터 -->
+                <img src="assets/monthly-char.png" style="position:absolute; left:91px; top:30px; width:144px; height:195px; object-fit:contain; pointer-events:none;" alt="turtle"/>
+              </div>
+            </div>
+            <!-- 통계 카드 (별도, 분리) -->
+            <div style="margin:0 24px 16px; display:flex; gap:12px;">
+              <div style="flex:1; background:white; border-radius:12px; padding:16px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+                <div style="font-size:14px; color:rgb(134,143,137); margin-bottom:4px; letter-spacing:-0.03em;">목표 달성률</div>
+                <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">60%</div>
+              </div>
+              <div style="flex:1; background:white; border-radius:12px; padding:16px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+                <div style="font-size:14px; color:rgb(134,143,137); margin-bottom:4px; letter-spacing:-0.03em;">레벨</div>
+                <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Lv.3 거북이</div>
+              </div>
+            </div>
+            <div style="height:16px;"></div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: STRETCHING (I)
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_stretching }}; pointer-events:{{ pe_stretching }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid rgb(238,240,238); background:rgb(247,247,247);">
+              <div style="font-size:24px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">스트레칭</div>
+              <div class="tappable" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoNotifications }}">
+                <svg width="20" height="22" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              </div>
+            </div>
+            <!-- Group stretching card: 4가지 상태 -->
+            <div style="margin:16px 24px 0; background:rgb(249,250,251); border-radius:12px; padding:24px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <!-- Avatars (공통) -->
+              <div style="display:flex; justify-content:center; margin-bottom:12px;">
+                <div style="position:relative; width:96px; height:40px;">
+                  <div style="position:absolute; left:0; width:40px; height:40px; border-radius:9999px; border:2px solid white; background:white; box-shadow:inset 0 0 0 1px rgb(238,240,238); overflow:hidden;"><img src="uploads/Background.svg" style="width:40px; height:40px;"/></div>
+                  <div style="position:absolute; left:26px; width:40px; height:40px; border-radius:9999px; border:2px solid white; background:url(assets/friend-sarah.jpg) center/cover; overflow:hidden;"></div>
+                  <div style="position:absolute; left:54px; width:40px; height:40px; border-radius:9999px; border:2px solid white; background:rgb(229,231,235); display:flex; align-items:center; justify-content:center;"><span style="font-size:12px; font-weight:600; color:rgb(0,0,0);">+3</span></div>
+                </div>
+              </div>
+              <!-- STATE: none - 기본 -->
+              <div style="display:{{ tc_none }}; flex-direction:column; align-items:center; gap:0;">
+                <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; text-align:center; margin-bottom:8px;">함께하는 스트레칭</div>
+                <div style="font-size:14px; color:rgb(107,114,128); letter-spacing:-0.03em; line-height:1.6; text-align:center; margin-bottom:20px;">스트레칭 같이하기 알림을 보내고 주어진 시간 내<br/>친구와 스트레칭을 완료해 보세요.</div>
+                <div class="tappable" style="width:100%; height:46px; background:rgb(86,210,255); border-radius:6px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoFriendsList }}">
+                  <span style="font-size:14px; font-weight:600; color:white; letter-spacing:-0.03em;">알림 보내러 가기</span>
+                </div>
+              </div>
+              <!-- STATE: received - 친구가 나에게 알림 보낸 경우 (I) -->
+              <div style="display:{{ tc_received }}; flex-direction:column; align-items:center; gap:0;">
+                <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; text-align:center; margin-bottom:8px;">함께하는 스트레칭</div>
+                <div style="font-size:14px; color:rgb(107,114,128); letter-spacing:-0.03em; line-height:1.6; text-align:center; margin-bottom:20px;">"Sarah Miller"님이 같이해요 알림을 보냈어요!<br/>수락해서 함께 스트레칭을 완료해 보세요.</div>
+                <div style="display:flex; gap:8px; width:100%;">
+                  <div class="tappable" style="flex:1; height:46px; border-radius:6px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; justify-content:center;" onClick="{{ rejectTogether }}">
+                    <span style="font-size:14px; font-weight:600; color:rgb(168,178,171); letter-spacing:-0.03em;">거절하기</span>
+                  </div>
+                  <div class="tappable" style="flex:2; height:46px; background:rgb(86,210,255); border-radius:6px; display:flex; align-items:center; justify-content:center;" onClick="{{ acceptTogether }}">
+                    <span style="font-size:14px; font-weight:600; color:white; letter-spacing:-0.03em;">수락하기</span>
+                  </div>
+                </div>
+              </div>
+              <!-- STATE: sent - 알림 보낸 후 / 수락 후 (I2 - 사진 찍으러 가기) -->
+              <div style="display:{{ tc_sent }}; flex-direction:column; align-items:center; gap:0;">
+                <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; text-align:center; margin-bottom:8px;">함께하는 스트레칭</div>
+                <div style="font-size:14px; color:rgb(107,114,128); letter-spacing:-0.03em; line-height:1.6; text-align:center; margin-bottom:20px;">함께 스트레칭을 시작했어요!<br/>10분 이내에 사진을 찍어 완료해 보세요.</div>
+                <div class="tappable" style="width:100%; height:46px; background:rgb(86,210,255); border-radius:6px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoCamera }}">
+                  <span style="font-size:14px; font-weight:600; color:white; letter-spacing:-0.03em;">사진 찍으러 가기</span>
+                </div>
+              </div>
+              <!-- STATE: done - 사진 찍은 후 (I3 - 사진 보러가기) -->
+              <div style="display:{{ tc_done }}; flex-direction:column; align-items:center; gap:0;">
+                <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; text-align:center; margin-bottom:8px;">함께하는 스트레칭 완료!</div>
+                <div style="font-size:14px; color:rgb(107,114,128); letter-spacing:-0.03em; line-height:1.6; text-align:center; margin-bottom:20px;">스트레칭을 완료했어요.<br/>친구의 사진을 확인해 보세요.</div>
+                <div class="tappable" style="width:100%; height:46px; background:rgb(86,210,255); border-radius:6px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoPhotoDone }}">
+                  <span style="font-size:14px; font-weight:600; color:white; letter-spacing:-0.03em;">사진 보러가기</span>
+                </div>
+              </div>
+            </div>
+            <!-- Stretching guide -->
+            <div style="margin:16px 24px 0;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <div style="font-size:16px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">스트레칭 가이드</div>
+                <span style="font-size:12px; color:rgb(156,163,175);">8 Exercises · 12 Min</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <!-- Guide item 1 -->
+                <div class="tappable" style="background:rgb(249,250,251); border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05); display:flex; align-items:center; gap:0; height:88px;" onClick="{{ gotoStretch0 }}">
+                  <img src="uploads/Background.png" style="width:88px; height:88px; object-fit:cover; flex-shrink:0;"/>
+                  <div style="padding:0 16px; flex:1;">
+                    <div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; margin-bottom:4px;">목 뒤 늘리기</div>
+                    <div style="font-size:14px; color:rgb(134,143,137);">45초</div>
+                  </div>
+                  <svg style="margin-right:16px; flex-shrink:0;" width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="tappable" style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05); display:flex; align-items:center; height:88px;" onClick="{{ gotoStretch1 }}">
+                  <img src="uploads/Background-1.png" style="width:88px; height:88px; object-fit:cover; flex-shrink:0;"/>
+                  <div style="padding:0 16px; flex:1;"><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; margin-bottom:4px;">머리 위로 팔 뻗기</div><div style="font-size:14px; color:rgb(134,143,137);">60초</div></div>
+                  <svg style="margin-right:16px;" width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="tappable" style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05); display:flex; align-items:center; height:88px;" onClick="{{ gotoStretch2 }}">
+                  <img src="uploads/Background-2.png" style="width:88px; height:88px; object-fit:cover; flex-shrink:0;"/>
+                  <div style="padding:0 16px; flex:1;"><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; margin-bottom:4px;">목 옆 늘리기</div><div style="font-size:14px; color:rgb(134,143,137);">60초</div></div>
+                  <svg style="margin-right:16px;" width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="tappable" style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05); display:flex; align-items:center; height:88px;" onClick="{{ gotoStretch3 }}">
+                  <img src="uploads/Background-3.png" style="width:88px; height:88px; object-fit:cover; flex-shrink:0;"/>
+                  <div style="padding:0 16px; flex:1;"><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; margin-bottom:4px;">가슴 펴기</div><div style="font-size:14px; color:rgb(134,143,137);">45초</div></div>
+                  <svg style="margin-right:16px;" width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+            <div style="height:24px;"></div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: FRIEND SEARCH NO RESULTS (G-2_3)
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_no_results }}; pointer-events:{{ pe_no_results }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <!-- Header -->
+            <div style="display:flex; align-items:center; gap:16px; padding:16px; border-bottom:1px solid rgb(238,240,238); background:white;">
+              <div class="tappable" style="width:24px; height:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0;" onClick="{{ gotoFriendSearch }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+              <div style="font-size:24px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">검색</div>
+            </div>
+            <!-- Active search bar with X -->
+            <div style="padding:16px 24px;">
+              <div style="height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 2px rgb(120,219,255); display:flex; align-items:center; gap:8px; padding:0 16px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <span style="font-size:14px; color:rgb(34,34,34); letter-spacing:-0.03em; flex:1;">Alex</span>
+                <div class="tappable" style="padding:4px;" onClick="{{ gotoFriendSearch }}">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </div>
+              </div>
+            </div>
+            <!-- No results empty state -->
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 24px 32px;">
+              <div style="position:relative; width:180px; height:196px; margin-bottom:24px;">
+                <div style="position:absolute; left:44.5px; top:147px; width:105px; height:24px; border-radius:50%; background:rgba(0,0,0,0.11);"></div>
+                <img src="uploads/image 71-4cc96ebe.png" style="position:absolute; left:0; top:0; width:180px; height:180px; object-fit:contain;" alt="no results turtle"/>
+              </div>
+              <div style="font-size:16px; font-weight:600; color:rgb(134,143,137); letter-spacing:-0.03em; text-align:center; margin-bottom:8px;">사용자가 없습니다</div>
+              <div style="font-size:14px; color:rgb(185,194,188); letter-spacing:-0.03em; text-align:center;">다른 ID로 검색해 보세요</div>
+            </div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             SCREEN: NOTIFICATIONS (K)
+        ════════════════════════════════════════ -->
+        <div class="scr" style="opacity:{{ op_notifications }}; pointer-events:{{ pe_notifications }}; background:rgb(247,247,247);">
+          <div class="scroll">
+            <div class="status-spacer"></div>
+            <div style="display:flex; align-items:center; justify-content:center; position:relative; padding:16px; border-bottom:1px solid rgb(238,240,238); background:white;">
+              <div class="tappable" style="position:absolute; left:16px; width:24px; height:24px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoBackToHome }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+              <span style="font-size:20px; font-weight:600; color:rgb(0,0,0); letter-spacing:-0.03em;">알림</span>
+            </div>
+            <!-- Today section -->
+            <div style="padding:16px 0 0;">
+              <div style="font-size:14px; font-weight:600; color:rgb(168,178,171); padding:0 16px 8px; letter-spacing:-0.03em;">오늘</div>
+              <!-- Notif 1: Friend added -->
+              <div style="background:white; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="position:relative; flex-shrink:0;">
+                  <div style="width:48px; height:48px; background:rgb(238,240,238); border-radius:9999px; display:flex; align-items:center; justify-content:center;">
+                    <svg width="20" height="16" viewBox="0 0 20 16" fill="rgb(185,194,188)"><path d="M18 0H2C.9 0 0 .9 0 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V2l8 5 8-5v2z"/></svg>
+                  </div>
+                  <div style="position:absolute; top:-3px; right:-3px; width:12px; height:12px; background:rgb(86,210,255); border-radius:999px; border:2px solid white;"></div>
+                </div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+                    <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">친구가 추가되었습니다</span>
+                    <span style="font-size:12px; color:rgb(185,194,188); flex-shrink:0; margin-left:8px;">2m</span>
+                  </div>
+                  <div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em; line-height:1.5;">Alex Rivera와 친구가 되었습니다.<br/>함께 스트레칭을 시작해 보세요!</div>
+                </div>
+              </div>
+              <!-- Notif 2: Quest completed -->
+              <div style="background:white; border-top:1px solid rgb(238,240,238); border-bottom:1px solid rgb(238,240,238); padding:16px 24px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="position:relative; flex-shrink:0;">
+                  <div style="width:48px; height:48px; background:rgb(238,240,238); border-radius:9999px; display:flex; align-items:center; justify-content:center;">
+                    <svg width="18" height="16" viewBox="0 0 20 16" fill="rgb(185,194,188)"><path d="M18 0H2C.9 0 0 .9 0 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V2l8 5 8-5v2z"/></svg>
+                  </div>
+                  <div style="position:absolute; top:-3px; right:-3px; width:12px; height:12px; background:rgb(86,210,255); border-radius:999px; border:2px solid white;"></div>
+                </div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+                    <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">퀘스트를 완료하였습니다</span>
+                    <span style="font-size:12px; color:rgb(185,194,188); flex-shrink:0; margin-left:8px;">1h</span>
+                  </div>
+                  <div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em; line-height:1.5;">"하늘 올려다보기" 퀘스트를 완료하여<br/>경험치 50xp를 획득했습니다.</div>
+                </div>
+              </div>
+              <!-- Notif 3: level -->
+              <div style="background:white; padding:16px 24px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:48px; height:48px; background:rgb(238,240,238); border-radius:9999px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+                    <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">거북이 탈출까지 10% 남았습니다</span>
+                    <span style="font-size:12px; color:rgb(185,194,188); flex-shrink:0; margin-left:8px;">3h</span>
+                  </div>
+                  <div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em;">스트레칭을 완료하면 경험치를 얻을 수 있습니다.</div>
+                </div>
+              </div>
+            </div>
+            <!-- Earlier section -->
+            <div style="padding:16px 0 0; margin-top:8px;">
+              <div style="font-size:14px; font-weight:600; color:rgb(168,178,171); padding:0 16px 8px; letter-spacing:-0.03em;">이전</div>
+              <div class="tappable" style="background:white; padding:16px 24px; display:flex; gap:16px; align-items:flex-start; border-bottom:1px solid rgb(238,240,238);" onClick="{{ receiveTogether }}">
+                <div style="width:48px; height:48px; background:rgb(238,240,238); border-radius:9999px; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><svg width="20" height="16" viewBox="0 0 20 16" fill="rgb(185,194,188)"><path d="M18 0H2C.9 0 0 .9 0 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V2l8 5 8-5v2z"/></svg></div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">함께하는 스트레칭</span><span style="font-size:12px; color:rgb(185,194,188);">Oct 12</span></div>
+                  <div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em; line-height:1.5;">Jordan Smith가 스트레칭을 함께하자고 합니다.<br/>수락하고 10분내로 사진을 올려보세요.</div>
+                </div>
+              </div>
+              <div style="background:white; padding:16px 24px; display:flex; gap:16px; align-items:flex-start; border-bottom:1px solid rgb(238,240,238);">
+                <div style="width:48px; height:48px; background:rgb(238,240,238); border-radius:9999px; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">오늘의 퀘스트를 모두 완료하였습니다</span><span style="font-size:12px; color:rgb(185,194,188);">Oct 10</span></div>
+                  <div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em; line-height:1.5;">모든 퀘스트를 완료하여 추가 경험치 10xp를<br/>획득했습니다.</div>
+                </div>
+              </div>
+              <div style="background:white; padding:16px 24px; display:flex; gap:16px; align-items:flex-start;">
+                <div style="width:48px; height:48px; background:rgb(238,240,238); border-radius:9999px; flex-shrink:0; display:flex; align-items:center; justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-8v4h4l-5 8z"/></svg></div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">레벨이 올랐습니다!</span><span style="font-size:12px; color:rgb(185,194,188);">Oct 8</span></div>
+                  <div style="font-size:14px; color:rgb(168,178,171); letter-spacing:-0.03em;">Lv.2 아기거북이 → Lv.3 거북이로 성장했어요 🎉</div>
+                </div>
+              </div>
+            </div>
+            <div style="height:40px;"></div>
+          </div>
+        </div>
+
+        <!-- ═══ ONBOARDING (B) ═══ -->
+        <div class="scr" style="opacity:{{ op_onboarding }}; pointer-events:{{ pe_onboarding }}; background:white; display:flex; flex-direction:column;">
+          <div class="status-spacer"></div>
+          <div style="display:flex; justify-content:center; padding:24px 0 16px;">
+          </div>
+          <div style="margin:0 24px; border-radius:20px; background:linear-gradient(180deg,rgb(221,246,255),rgb(255,251,235)); height:268px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+            <img src="assets/turtle-hero.png" class="splash-char" style="width:160px; height:auto; object-fit:contain;"/>
+          </div>
+          <div style="padding:28px 24px 0; text-align:center;">
+            <div style="font-size:28px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.04em; margin-bottom:8px;">TURUP!</div>
+            <div style="font-size:16px; color:rgb(134,143,137); letter-spacing:-0.03em;">친구와 함께 만드는 스트레칭 루틴</div>
+          </div>
+          <div style="position:absolute; bottom:48px; left:24px; right:24px; display:flex; flex-direction:column; gap:12px;">
+            <div class="tappable" style="height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoLogin }}">
+              <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">로그인</span>
+            </div>
+            <div class="tappable" style="height:52px; border-radius:12px; box-shadow:inset 0 0 0 1.5px rgb(86,210,255); display:flex; align-items:center; justify-content:center;" onClick="{{ gotoSignup }}">
+              <span style="font-size:16px; font-weight:600; color:rgb(86,210,255); letter-spacing:-0.03em;">회원가입</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ LOGIN (C) ═══ -->
+        <div class="scr" style="opacity:{{ op_login }}; pointer-events:{{ pe_login }}; background:white;">
+          <div class="scroll">
+            <div class="status-spacer"></div>
+            <div style="padding:48px 24px 0; display:flex; flex-direction:column; align-items:center; gap:12px;">
+              <img src="uploads/Frame 29.png" style="width:72px; height:72px; border-radius:16px; object-fit:cover;"/>
+              <div style="font-size:24px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.04em; text-align:center; margin-top:4px;">다시 오신 것을 환영합니다</div>
+              <div style="font-size:14px; color:rgb(134,143,137); letter-spacing:-0.03em; text-align:center;">계정에 접속하려면 로그인 정보를 입력하세요</div>
+            </div>
+            <div style="padding:32px 24px 0; display:flex; flex-direction:column; gap:16px;">
+              <div>
+                <div style="font-size:13px; font-weight:600; color:rgb(101,107,103); letter-spacing:-0.02em; margin-bottom:6px;">이메일</div>
+                <input type="email" placeholder="이메일을 입력하세요" style="width:100%; height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); border:none; outline:none; padding:0 14px; font-size:14px; color:rgb(34,34,34); font-family:'Pretendard Variable','Noto Sans KR',sans-serif; box-sizing:border-box;" onFocus="this.style.boxShadow='inset 0 0 0 2px rgb(86,210,255)'" onBlur="this.style.boxShadow='inset 0 0 0 1px rgb(238,240,238)'"/>
+              </div>
+              <div>
+                <div style="font-size:13px; font-weight:600; color:rgb(101,107,103); letter-spacing:-0.02em; margin-bottom:6px;">비밀번호</div>
+                <input type="password" placeholder="비밀번호를 입력하세요" style="width:100%; height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); border:none; outline:none; padding:0 14px; font-size:14px; color:rgb(34,34,34); font-family:'Pretendard Variable','Noto Sans KR',sans-serif; box-sizing:border-box;" onFocus="this.style.boxShadow='inset 0 0 0 2px rgb(86,210,255)'" onBlur="this.style.boxShadow='inset 0 0 0 1px rgb(238,240,238)'"/>
+              </div>
+            </div>
+            <div style="padding:24px 24px 0; display:flex; flex-direction:column; gap:12px;">
+              <div class="tappable" style="height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoHome }}">
+                <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">로그인</span>
+              </div>
+              <div class="tappable" style="display:flex; align-items:center; justify-content:center; padding:12px;" onClick="{{ gotoSignup }}">
+                <span style="font-size:14px; color:rgb(134,143,137); letter-spacing:-0.03em;">계정이 없으신가요? <span style="color:rgb(86,210,255); font-weight:600;">회원가입</span></span>
+              </div>
+            </div>
+            <div style="height:48px;"></div>
+          </div>
+        </div>
+
+        <!-- ═══ SIGNUP (D) ═══ -->
+        <div class="scr" style="opacity:{{ op_signup }}; pointer-events:{{ pe_signup }}; background:white;">
+          <div class="scroll">
+            <div class="status-spacer"></div>
+            <div style="display:flex; align-items:center; padding:16px 24px; gap:12px;">
+              <div class="tappable" style="width:32px; height:32px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoLogin }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+            </div>
+            <div style="padding:16px 24px 0; display:flex; flex-direction:column; align-items:center; gap:10px;">
+              <img src="uploads/Frame 29.png" style="width:72px; height:72px; border-radius:16px; object-fit:cover;"/>
+              <div style="font-size:24px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.04em; text-align:center;">계정 만들기</div>
+              <div style="font-size:14px; color:rgb(134,143,137); letter-spacing:-0.03em; text-align:center;">정보를 입력하여 계정을 생성하세요</div>
+            </div>
+            <div style="padding:24px 24px 0; display:flex; flex-direction:column; gap:14px;">
+              <div>
+                <div style="font-size:13px; font-weight:600; color:rgb(101,107,103); margin-bottom:6px;">이름</div>
+                <input type="text" placeholder="이름을 입력하세요" style="width:100%; height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); border:none; outline:none; padding:0 14px; font-size:14px; color:rgb(34,34,34); font-family:'Pretendard Variable','Noto Sans KR',sans-serif; box-sizing:border-box;" onFocus="this.style.boxShadow='inset 0 0 0 2px rgb(86,210,255)'" onBlur="this.style.boxShadow='inset 0 0 0 1px rgb(238,240,238)'"/>
+              </div>
+              <div>
+                <div style="font-size:13px; font-weight:600; color:rgb(101,107,103); margin-bottom:6px;">닉네임</div>
+                <input type="text" placeholder="닉네임을 입력하세요" style="width:100%; height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); border:none; outline:none; padding:0 14px; font-size:14px; color:rgb(34,34,34); font-family:'Pretendard Variable','Noto Sans KR',sans-serif; box-sizing:border-box;" onFocus="this.style.boxShadow='inset 0 0 0 2px rgb(86,210,255)'" onBlur="this.style.boxShadow='inset 0 0 0 1px rgb(238,240,238)'"/>
+              </div>
+              <div>
+                <div style="font-size:13px; font-weight:600; color:rgb(101,107,103); margin-bottom:6px;">이메일</div>
+                <input type="email" placeholder="이메일을 입력하세요" style="width:100%; height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); border:none; outline:none; padding:0 14px; font-size:14px; color:rgb(34,34,34); font-family:'Pretendard Variable','Noto Sans KR',sans-serif; box-sizing:border-box;" onFocus="this.style.boxShadow='inset 0 0 0 2px rgb(86,210,255)'" onBlur="this.style.boxShadow='inset 0 0 0 1px rgb(238,240,238)'"/>
+              </div>
+              <div>
+                <div style="font-size:13px; font-weight:600; color:rgb(101,107,103); margin-bottom:6px;">비밀번호</div>
+                <input type="password" placeholder="비밀번호를 입력하세요" style="width:100%; height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); border:none; outline:none; padding:0 14px; font-size:14px; color:rgb(34,34,34); font-family:'Pretendard Variable','Noto Sans KR',sans-serif; box-sizing:border-box;" onFocus="this.style.boxShadow='inset 0 0 0 2px rgb(86,210,255)'" onBlur="this.style.boxShadow='inset 0 0 0 1px rgb(238,240,238)'"/>
+              </div>
+            </div>
+            <div style="padding:24px 24px 0;">
+              <div class="tappable" style="height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoInitialSetup }}">
+                <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">가입하기</span>
+              </div>
+            </div>
+            <div style="height:48px;"></div>
+          </div>
+        </div>
+
+        <!-- ═══ INITIAL SETUP (E) ═══ -->
+        <div class="scr" style="opacity:{{ op_initial_setup }}; pointer-events:{{ pe_initial_setup }}; background:white;">
+          <div class="scroll">
+            <div class="status-spacer"></div>
+            <div style="display:flex; align-items:center; padding:16px 24px;">
+              <div class="tappable" style="width:32px; height:32px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoSignup }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+            </div>
+            <div style="padding:8px 24px 0;">
+              <div style="font-size:28px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.04em; margin-bottom:8px;">초기 설정</div>
+              <div style="font-size:14px; color:rgb(134,143,137); letter-spacing:-0.03em; line-height:1.6;">집중하는 시간과 목표를 설정하여<br/>앱을 효과적으로 사용해 보세요.</div>
+            </div>
+            <!-- 알림 시간 -->
+            <div style="margin:24px 24px 0; background:white; border-radius:12px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="font-size:12px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px;">알림 설정</div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgb(238,240,238);">
+                <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">스트레칭 알림</div><div style="font-size:13px; color:rgb(168,178,171);">매 1시간마다 알림 전송</div></div>
+                <div style="width:44px; height:26px; border-radius:999px; background:rgb(86,210,255); display:flex; align-items:center; padding:0 3px; justify-content:flex-end;"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0;">
+                <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">친구 알림</div><div style="font-size:13px; color:rgb(168,178,171);">친구 활동 알림 수신</div></div>
+                <div style="width:44px; height:26px; border-radius:999px; background:rgb(86,210,255); display:flex; align-items:center; padding:0 3px; justify-content:flex-end;"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
+              </div>
+            </div>
+            <!-- 집중 모드 -->
+            <div style="margin:16px 24px 0; background:white; border-radius:12px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="font-size:12px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px;">집중 모드</div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgb(238,240,238);">
+                <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">집중 시간</div><div style="font-size:13px; color:rgb(168,178,171);">목표 집중 시간</div></div>
+                <div style="display:flex; align-items:center; gap:6px;"><span style="font-size:16px; font-weight:600; color:rgb(86,210,255);">25분</span><svg width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0;">
+                <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">휴식 시간</div><div style="font-size:13px; color:rgb(168,178,171);">집중 후 휴식 시간</div></div>
+                <div style="display:flex; align-items:center; gap:6px;"><span style="font-size:16px; font-weight:600; color:rgb(86,210,255);">5분</span><svg width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              </div>
+            </div>
+            <!-- 목표 레벨 -->
+            <div style="margin:16px 24px 0; background:white; border-radius:12px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="font-size:12px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px;">목표 설정</div>
+              <div style="display:flex; gap:8px;">
+                <div style="flex:1; border-radius:8px; padding:12px; box-shadow:inset 0 0 0 2px rgb(86,210,255); display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <span style="font-size:20px;">🔰</span>
+                  <span style="font-size:12px; font-weight:600; color:rgb(86,210,255);">초급</span>
+                </div>
+                <div style="flex:1; border-radius:8px; padding:12px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <span style="font-size:20px;">⚡</span>
+                  <span style="font-size:12px; color:rgb(168,178,171);">중급</span>
+                </div>
+                <div style="flex:1; border-radius:8px; padding:12px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; flex-direction:column; align-items:center; gap:4px;">
+                  <span style="font-size:20px;">🏆</span>
+                  <span style="font-size:12px; color:rgb(168,178,171);">고급</span>
+                </div>
+              </div>
+            </div>
+            <div style="padding:24px; margin-top:8px;">
+              <div class="tappable" style="height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoWelcome }}">
+                <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">다음</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ WELCOME (E-3) ═══ -->
+        <div class="scr" style="opacity:{{ op_welcome }}; pointer-events:{{ pe_welcome }}; background:white; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:24px; padding:0 24px;">
+            <img src="assets/turtle-hero.png" class="splash-char" style="width:200px; height:auto; object-fit:contain;"/>
+            <div style="text-align:center;">
+              <div style="font-size:36px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.04em; margin-bottom:12px;">환영합니다!</div>
+              <div style="font-size:16px; color:rgb(134,143,137); letter-spacing:-0.03em; line-height:1.6;">설정이 완료되었어요.<br/>거북이와 함께 자세 교정을 시작해 봐요.</div>
+            </div>
+            <div class="tappable" style="width:200px; height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center; margin-top:8px;" onClick="{{ gotoHome }}">
+              <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">시작하기</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ STRETCH DETAIL (I-1_1 와이어프레임) ═══ -->
+        <div class="scr" style="opacity:{{ op_stretch_detail }}; pointer-events:{{ pe_stretch_detail }}; background:white;">
+          <div class="status-spacer"></div>
+          <!-- Header -->
+          <div style="position:absolute; top:env(safe-area-inset-top, 0px); left:0; right:0; height:64px; background:white; border-bottom:1px solid rgb(238,240,238); display:flex; align-items:center; justify-content:space-between; padding:0 16px; z-index:10;">
+            <div class="tappable" style="width:32px; height:32px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretching }}">
+              <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+            </div>
+            <span style="font-size:18px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">{{ stretchTitle }}</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:10px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; line-height:1.4; text-align:right;">Voice<br/>Coach</span>
+              <div class="tappable" style="width:36px; height:22px; border-radius:999px; background:{{ vcBg }}; display:flex; align-items:center; padding:0 3px; justify-content:{{ vcJustify }};" onClick="{{ toggleVC }}">
+                <div style="width:16px; height:16px; border-radius:50%; background:white;"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Main: space-between layout -->
+          <div style="position:absolute; top:111px; left:0; right:0; bottom:0; display:flex; flex-direction:column; align-items:center; justify-content:space-between; padding:40px 24px 48px;">
+            <!-- 이미지 327×327 -->
+            <div style="width:100%; aspect-ratio:1; border-radius:16px; overflow:hidden; background:rgb(238,240,238); flex-shrink:0;">
+              <img src="uploads/Background.png" style="display:{{ si0 }}; width:100%; height:100%; object-fit:cover;"/>
+              <img src="uploads/Background-1.png" style="display:{{ si1 }}; width:100%; height:100%; object-fit:cover;"/>
+              <img src="uploads/Background-2.png" style="display:{{ si2 }}; width:100%; height:100%; object-fit:cover;"/>
+              <img src="uploads/Background-3.png" style="display:{{ si3 }}; width:100%; height:100%; object-fit:cover;"/>
+            </div>
+            <!-- 설명 텍스트 -->
+            <div style="text-align:center; font-size:18px; font-weight:500; color:rgb(55,65,81); letter-spacing:-0.025em; line-height:1.6;">{{ stretchInstruction }}</div>
+            <!-- 타이머 -->
+            <div style="font-size:52px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.06em; line-height:1; font-variant-numeric:tabular-nums;">{{ timerDisplay }}</div>
+            <!-- 종료 버튼 -->
+            <div class="tappable" style="width:100%; height:56px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretchComplete }}">
+              <span style="font-size:18px; font-weight:600; color:white; letter-spacing:-0.03em;">종료</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ STRETCH TIMER (I-2_1) ═══ -->
+        <div class="scr" style="opacity:{{ op_stretch_timer }}; pointer-events:{{ pe_stretch_timer }}; background:rgb(17,24,39);">
+          <!-- Top overlay -->
+          <div style="position:absolute; top:0; left:0; right:0; height:88px; background:linear-gradient(180deg,rgba(0,0,0,0.6),transparent); display:flex; align-items:flex-start; padding:52px 24px 0; justify-content:space-between; z-index:10;">
+            <div class="tappable" style="width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretchDetail }}">
+              <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="white"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+            </div>
+            <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">{{ stretchTitle }}</span>
+            <div style="width:40px;"></div>
+          </div>
+          <!-- Camera preview placeholder -->
+          <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+              <svg width="60" height="52" viewBox="0 0 24 24" fill="rgb(75,85,99)"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/></svg>
+              <span style="font-size:13px; font-weight:500; color:rgb(107,114,128); letter-spacing:0.08em;">Camera Preview Area</span>
+            </div>
+          </div>
+          <!-- Timer ring + countdown -->
+          <div style="position:absolute; bottom:0; left:0; right:0; height:320px; background:linear-gradient(0deg,rgb(17,24,39) 60%,transparent); display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:48px;">
+            <div style="position:relative; width:160px; height:160px; margin-bottom:24px;">
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="8"/>
+                <circle cx="80" cy="80" r="70" fill="none" stroke="rgb(86,210,255)" stroke-width="8" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="{{ timerDash }}" transform="rotate(-90 80 80)" style="transition:stroke-dashoffset 1s linear;"/>
+              </svg>
+              <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <span style="font-size:40px; font-weight:600; color:white; letter-spacing:-0.04em; line-height:1;">{{ timerDisplay }}</span>
+                <span style="font-size:13px; color:rgba(255,255,255,0.5); letter-spacing:0.04em; margin-top:2px;">{{ stretchTime }}</span>
+              </div>
+            </div>
+            <div class="tappable" style="width:200px; height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretchComplete }}">
+              <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">완료</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ STRETCH COMPLETE (I-1_2) ═══ -->
+        <div class="scr" style="opacity:{{ op_stretch_complete }}; pointer-events:{{ pe_stretch_complete }}; background:white; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 24px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:20px; width:100%;">
+            <div style="width:64px; height:64px; border-radius:50%; background:rgb(221,246,255); display:flex; align-items:center; justify-content:center;">
+              <svg width="28" height="22" viewBox="0 0 28 22" fill="rgb(86,210,255)"><path d="M25.6.55C26.42 1.37 26.42 2.68 25.6 3.5L10.6 18.5C9.78 19.32 8.47 19.32 7.65 18.5L.55 11.4C-.27 10.58-.27 9.27.55 8.45c.82-.82 2.13-.82 2.95 0l5.75 5.75L22.65.55C23.47-.27 24.78-.27 25.6.55Z"/></svg>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:24px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.04em; margin-bottom:8px;">스트레칭을 완료했어요!</div>
+              <div style="font-size:14px; color:rgb(134,143,137); letter-spacing:-0.03em; line-height:1.6;">"{{ stretchTitle }}"을 완료했어요.<br/>다음 스트레칭도 진행하고 추가 경험치를 얻어보세요.</div>
+            </div>
+            <!-- XP Card -->
+            <div style="width:100%; background:linear-gradient(135deg,rgb(221,246,255),rgb(188,237,255)); border-radius:16px; padding:20px; display:flex; align-items:center; justify-content:center; gap:16px;">
+              <div style="text-align:center;">
+                <div style="font-size:32px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.04em;">+30 XP</div>
+                <div style="font-size:13px; color:rgb(86,210,255); letter-spacing:-0.02em;">경험치 획득!</div>
+              </div>
+              <div style="width:1px; height:48px; background:rgba(86,210,255,0.3);"></div>
+              <div style="text-align:center;">
+                <div style="font-size:24px; font-weight:600; color:rgb(34,34,34);">3/8</div>
+                <div style="font-size:13px; color:rgb(101,107,103); letter-spacing:-0.02em;">오늘 완료</div>
+              </div>
+            </div>
+            <!-- Character -->
+            <img src="assets/turtle-hero.png" style="width:120px; height:auto; object-fit:contain;"/>
+            <!-- Buttons -->
+            <div style="width:100%; display:flex; flex-direction:column; gap:10px;">
+              <div class="tappable" style="height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretching }}">
+                <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">다음 스트레칭</span>
+              </div>
+              <div class="tappable" style="height:48px; border-radius:12px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; justify-content:center;" onClick="{{ gotoHome }}">
+                <span style="font-size:14px; color:rgb(134,143,137); letter-spacing:-0.03em;">홈으로 돌아가기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ STRETCH TOGETHER – 알림 (I) ═══ -->
+        <div class="scr" style="opacity:{{ op_stretch_together }}; pointer-events:{{ pe_stretch_together }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid rgb(238,240,238); background:rgb(247,247,247);">
+              <div style="font-size:24px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">스트레칭</div>
+              <div class="tappable" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoNotifications }}">
+                <svg width="20" height="22" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              </div>
+            </div>
+            <!-- Request card -->
+            <div style="margin:16px 24px 0; background:white; border-radius:16px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                <div style="width:48px; height:48px; border-radius:50%; background:url(assets/friend-sarah.jpg) center/cover; flex-shrink:0;"></div>
+                <div>
+                  <div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Sarah Miller</div>
+                  <div style="font-size:13px; color:rgb(134,143,137);">스트레칭을 같이 하자고 합니다!</div>
+                </div>
+                <!-- Timer badge -->
+                <div style="margin-left:auto; background:rgb(255,241,242); border-radius:8px; padding:6px 10px; display:flex; align-items:center; gap:4px; flex-shrink:0;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="rgb(244,63,94)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+                  <span style="font-size:12px; font-weight:600; color:rgb(244,63,94);">{{ togetherTimer }}</span>
+                </div>
+              </div>
+              <div style="background:rgb(247,247,247); border-radius:10px; padding:14px; margin-bottom:16px;">
+                <div style="font-size:14px; color:rgb(101,107,103); letter-spacing:-0.03em; text-align:center;">목 뒤 늘리기 · 45초 스트레칭</div>
+              </div>
+              <div style="display:flex; gap:10px;">
+                <div class="tappable" style="flex:1; height:48px; border-radius:10px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretching }}">
+                  <span style="font-size:14px; font-weight:600; color:rgb(168,178,171); letter-spacing:-0.03em;">거절</span>
+                </div>
+                <div class="tappable" style="flex:2; height:48px; border-radius:10px; background:rgb(86,210,255); display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretchTogetherAccept }}">
+                  <span style="font-size:14px; font-weight:600; color:white; letter-spacing:-0.03em;">수락</span>
+                </div>
+              </div>
+            </div>
+            <div style="height:24px;"></div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══ STRETCH TOGETHER – 수락 (I2) ═══ -->
+        <div class="scr" style="opacity:{{ op_stretch_together_accept }}; pointer-events:{{ pe_stretch_together_accept }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid rgb(238,240,238); background:rgb(247,247,247);">
+              <div style="font-size:24px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">스트레칭</div>
+            </div>
+            <!-- Accepted state -->
+            <div style="margin:16px 24px; background:white; border-radius:16px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                <div style="width:8px; height:8px; border-radius:50%; background:rgb(34,197,94);"></div>
+                <span style="font-size:14px; font-weight:600; color:rgb(34,197,94);">수락됨 · 함께 시작해요!</span>
+              </div>
+              <div style="display:flex; margin-bottom:16px;">
+                <div style="width:48px; height:48px; border-radius:50%; border:2px solid white; background:url(assets/friend-sarah.jpg) center/cover; flex-shrink:0;"></div>
+                <div style="width:48px; height:48px; border-radius:50%; border:2px solid white; background:rgb(221,246,255); margin-left:-8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden;"><img src="uploads/Background.svg" style="width:48px; height:48px;"/></div>
+              </div>
+              <div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em; margin-bottom:4px;">Sarah Miller과 함께하는 스트레칭</div>
+              <div style="font-size:13px; color:rgb(134,143,137); margin-bottom:16px;">10분 안에 스트레칭을 완료해 주세요!</div>
+              <div class="tappable" style="height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretchDetail }}">
+                <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">스트레칭 시작</span>
+              </div>
+            </div>
+            <div style="height:24px;"></div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:89px; background:white; border-top:1px solid rgb(238,240,238);"></div>
+        </div>
+
+        <!-- ═══ STRETCH TOGETHER COMPLETE (I-2_2) ═══ -->
+        <div class="scr" style="opacity:{{ op_stretch_together_complete }}; pointer-events:{{ pe_stretch_together_complete }}; background:white;">
+          <div class="scroll">
+            <div class="status-spacer"></div>
+            <!-- Header -->
+            <div style="display:flex; align-items:center; justify-content:center; position:relative; padding:16px; border-bottom:1px solid rgb(238,240,238);">
+              <div class="tappable" style="position:absolute; left:16px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoHome }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+              <span style="font-size:18px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">함께하는 스트레칭 완료</span>
+            </div>
+            <div style="padding:32px 24px; display:flex; flex-direction:column; align-items:center; gap:20px;">
+              <!-- Friends celebration -->
+              <div style="display:flex;">
+                <div style="width:64px; height:64px; border-radius:50%; border:3px solid white; background:url(assets/friend-sarah.jpg) center/cover; box-shadow:0 0 0 2px rgb(86,210,255);"></div>
+                <div style="width:64px; height:64px; border-radius:50%; border:3px solid white; margin-left:-10px; background:rgb(221,246,255); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px rgb(86,210,255); overflow:hidden;"><img src="uploads/Background.svg" style="width:64px; height:64px;"/></div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:24px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.04em; margin-bottom:8px;">같이 완료했어요! 🎉</div>
+                <div style="font-size:14px; color:rgb(134,143,137); letter-spacing:-0.03em; line-height:1.6;">Sarah Miller과 함께 스트레칭을 완료했어요.<br/>서로에게 응원을 보내요!</div>
+              </div>
+              <!-- Bonus XP -->
+              <div style="width:100%; background:linear-gradient(135deg,rgb(221,246,255),rgb(188,237,255)); border-radius:16px; padding:20px; display:flex; justify-content:space-around; align-items:center;">
+                <div style="text-align:center;"><div style="font-size:26px; font-weight:600; color:rgb(34,34,34);">+50 XP</div><div style="font-size:12px; color:rgb(86,210,255);">보너스 포함</div></div>
+                <div style="width:1px; height:40px; background:rgba(86,210,255,0.3);"></div>
+                <div style="text-align:center;"><div style="font-size:26px; font-weight:600; color:rgb(34,34,34);">2명</div><div style="font-size:12px; color:rgb(101,107,103);">함께 완료</div></div>
+              </div>
+              <img src="assets/turtle-hero.png" style="width:100px; height:auto; object-fit:contain;"/>
+              <div class="tappable" style="width:100%; height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoHome }}">
+                <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">홈으로 돌아가기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ SETTINGS (J) ═══ -->
+        <div class="scr" style="opacity:{{ op_settings }}; pointer-events:{{ pe_settings }}; background:rgb(247,247,247);">
+          <div class="scroll" style="bottom:89px;">
+            <div class="status-spacer"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:white; border-bottom:1px solid rgb(238,240,238);">
+              <div style="font-size:24px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">설정</div>
+              <div class="tappable" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoHome }}">
+                <svg width="14" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)"><path d="M20.4341 8.857C20.5466 9.163 20.4517 9.504 20.2091 9.722L18.687 11.107C18.7255 11.399 18.7466 11.698 18.7466 12C18.7466 12.302 18.7255 12.601 18.687 12.893L20.2091 14.278C20.4517 14.496 20.5466 14.837 20.4341 15.143C20.2795 15.561 20.0931 15.962 19.879 16.349L19.7134 16.634C19.4814 17.02 19.2212 17.386 18.9365 17.731C18.729 17.984 18.3845 18.068 18.0752 17.97L16.117 17.347C15.6459 17.709 15.1255 18.012 14.5701 18.24L14.1306 20.248C14.0603 20.568 13.8142 20.821 13.4908 20.873C13.0056 20.954 12.5064 20.997 11.9966 20.997C11.4869 20.997 10.9877 20.954 10.5025 20.873C10.1791 20.821 9.93297 20.568 9.86266 20.248L9.4232 18.24C8.86773 18.012 8.34742 17.709 7.87633 17.347L5.92164 17.973C5.61226 18.072 5.26773 17.984 5.06031 17.734C4.77555 17.389 4.51539 17.024 4.28336 16.637L4.11812 16.352C3.90367 15.966 3.71734 15.565 3.56266 15.147C3.45016 14.841 3.54508 14.5 3.78766 14.282L5.30992 12.897C5.27125 12.601 5.25016 12.302 5.25016 12C5.25016 11.698 5.27125 11.399 5.30992 11.107L3.78766 9.722C3.54508 9.504 3.45016 9.163 3.56266 8.857C3.71734 8.439 3.90367 8.038 4.11812 7.651L4.28336 7.366C4.51539 6.98 4.77555 6.614 5.06031 6.27C5.26773 6.016 5.61226 5.932 5.92164 6.03L7.87984 6.653C8.35094 6.291 8.87125 5.988 9.42672 5.76L9.86617 3.752C9.93648 3.432 10.1826 3.179 10.506 3.127C10.9912 3.042 11.4904 3 12.0002 3C12.5099 3 13.0091 3.042 13.4943 3.123C13.8177 3.176 14.0638 3.429 14.1341 3.749L14.5736 5.756C15.1291 5.985 15.6494 6.287 16.1205 6.649L18.0787 6.027C18.388 5.929 18.7326 6.016 18.94 6.266C19.2248 6.611 19.4849 6.976 19.717 7.363L19.8822 7.648C20.0966 8.034 20.283 8.435 20.4377 8.854L20.4341 8.857ZM12.0002 14.813C12.7461 14.813 13.4614 14.516 13.9889 13.989C14.5163 13.461 14.8127 12.746 14.8127 12C14.8127 11.254 14.5163 10.539 13.9889 10.011C13.4614 9.484 12.7461 9.188 12.0002 9.188C11.2542 9.188 10.5389 9.484 10.0114 10.011C9.48397 10.539 9.18766 11.254 9.18766 12C9.18766 12.746 9.48397 13.461 10.0114 13.989C10.5389 14.516 11.2542 14.813 12.0002 14.813Z"/></svg>
+              </div>
+            </div>
+            <!-- 계정 -->
+            <div style="margin:16px 24px 0;">
+              <div style="font-size:11px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">계정</div>
+              <div style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05);">
+                <div class="tappable" style="display:flex; align-items:center; justify-content:space-between; padding:16px;">
+                  <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">프로필 수정</span>
+                  <svg width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+            <!-- 초기 설정 수정 -->
+            <div style="margin:16px 24px 0;">
+              <div style="font-size:11px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">초기 설정 수정</div>
+              <div style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05);">
+                <div class="tappable" style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-bottom:1px solid rgb(238,240,238);" onClick="{{ gotoFocusSettings }}">
+                  <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">집중 모드 설정</span>
+                  <svg width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="tappable" style="display:flex; align-items:center; justify-content:space-between; padding:16px;">
+                  <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">목표 설정</span>
+                  <svg width="7" height="12" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="rgb(168,178,171)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+            <!-- 알림 -->
+            <div style="margin:16px 24px 0;">
+              <div style="font-size:11px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">알림</div>
+              <div style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05);">
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-bottom:1px solid rgb(238,240,238);">
+                  <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">백그라운드 알림 설정</span>
+                  <div style="width:44px; height:26px; border-radius:999px; background:rgb(86,210,255); display:flex; align-items:center; padding:0 3px; justify-content:flex-end; flex-shrink:0;"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:16px;">
+                  <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">메일로 알림 받기</span>
+                  <div style="width:44px; height:26px; border-radius:999px; background:rgb(86,210,255); display:flex; align-items:center; padding:0 3px; justify-content:flex-end; flex-shrink:0;"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
+                </div>
+              </div>
+            </div>
+            <!-- 로그아웃 + 버전 -->
+            <div style="margin:16px 24px 0; padding-bottom:89px;">
+              <div class="tappable" style="height:52px; border-radius:12px; box-shadow:inset 0 0 0 1.5px rgb(238,240,238); display:flex; align-items:center; justify-content:center; margin-bottom:12px;" onClick="{{ gotoOnboarding }}">
+                <span style="font-size:16px; font-weight:600; color:rgb(101,107,103); letter-spacing:-0.03em;">로그아웃</span>
+              </div>
+              <div style="text-align:center;">
+                <span style="font-size:11px; color:rgb(185,194,188); letter-spacing:0.1em;">Version 2.4.0 (2026)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ FOCUS SETTINGS (J-1_1) ═══ -->
+        <div class="scr" style="opacity:{{ op_focus_settings }}; pointer-events:{{ pe_focus_settings }}; background:rgb(247,247,247);">
+          <div class="scroll">
+            <div class="status-spacer"></div>
+            <div style="display:flex; align-items:center; justify-content:center; position:relative; padding:16px; border-bottom:1px solid rgb(238,240,238); background:white;">
+              <div class="tappable" style="position:absolute; left:16px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoSettings }}">
+                <svg width="9" height="16" viewBox="0 0 9.002 15.755" fill="rgb(0,0,0)"><path d="M.33 7.083C-.11 7.523-.11 8.236.33 8.676l6.75 6.75c.439.439 1.153.439 1.592 0 .44-.44.44-1.153 0-1.593L2.717 7.878l5.952-5.956C9.108 1.483 9.108.769 8.669.33 8.229-.11 7.516-.11 7.076.33L.326 7.08l.004.003z"/></svg>
+              </div>
+              <span style="font-size:18px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">집중 모드 수정</span>
+            </div>
+            <!-- Focus time -->
+            <div style="margin:16px 24px 0; background:white; border-radius:12px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="font-size:12px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:16px;">집중 시간</div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <div style="height:40px; padding:0 16px; border-radius:20px; background:rgb(86,210,255); display:flex; align-items:center;"><span style="font-size:14px; font-weight:600; color:white;">25분</span></div>
+                <div style="height:40px; padding:0 16px; border-radius:20px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center;"><span style="font-size:14px; color:rgb(134,143,137);">30분</span></div>
+                <div style="height:40px; padding:0 16px; border-radius:20px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center;"><span style="font-size:14px; color:rgb(134,143,137);">45분</span></div>
+                <div style="height:40px; padding:0 16px; border-radius:20px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center;"><span style="font-size:14px; color:rgb(134,143,137);">60분</span></div>
+              </div>
+            </div>
+            <!-- Break time -->
+            <div style="margin:16px 24px 0; background:white; border-radius:12px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="font-size:12px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:16px;">휴식 시간</div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <div style="height:40px; padding:0 16px; border-radius:20px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center;"><span style="font-size:14px; color:rgb(134,143,137);">3분</span></div>
+                <div style="height:40px; padding:0 16px; border-radius:20px; background:rgb(86,210,255); display:flex; align-items:center;"><span style="font-size:14px; font-weight:600; color:white;">5분</span></div>
+                <div style="height:40px; padding:0 16px; border-radius:20px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center;"><span style="font-size:14px; color:rgb(134,143,137);">10분</span></div>
+                <div style="height:40px; padding:0 16px; border-radius:20px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center;"><span style="font-size:14px; color:rgb(134,143,137);">15분</span></div>
+              </div>
+            </div>
+            <!-- Days -->
+            <div style="margin:16px 24px 0; background:white; border-radius:12px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
+              <div style="font-size:12px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:16px;">요일 설정</div>
+              <div style="display:flex; gap:6px; justify-content:space-between;">
+                <div style="width:40px; height:40px; border-radius:50%; background:rgb(86,210,255); display:flex; align-items:center; justify-content:center;"><span style="font-size:13px; font-weight:600; color:white;">Mon</span></div>
+                <div style="width:40px; height:40px; border-radius:50%; background:rgb(86,210,255); display:flex; align-items:center; justify-content:center;"><span style="font-size:13px; font-weight:600; color:white;">Tue</span></div>
+                <div style="width:40px; height:40px; border-radius:50%; background:rgb(86,210,255); display:flex; align-items:center; justify-content:center;"><span style="font-size:13px; font-weight:600; color:white;">Wed</span></div>
+                <div style="width:40px; height:40px; border-radius:50%; background:rgb(86,210,255); display:flex; align-items:center; justify-content:center;"><span style="font-size:13px; font-weight:600; color:white;">Thu</span></div>
+                <div style="width:40px; height:40px; border-radius:50%; background:rgb(86,210,255); display:flex; align-items:center; justify-content:center;"><span style="font-size:13px; font-weight:600; color:white;">Fri</span></div>
+                <div style="width:40px; height:40px; border-radius:50%; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; justify-content:center;"><span style="font-size:13px; color:rgb(168,178,171);">Sat</span></div>
+                <div style="width:40px; height:40px; border-radius:50%; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; justify-content:center;"><span style="font-size:13px; color:rgb(168,178,171);">Sun</span></div>
+              </div>
+            </div>
+            <!-- Save -->
+            <div style="padding:24px;">
+              <div class="tappable" style="height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoSettings }}">
+                <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">저장</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CAMERA (I-2_1) ═══ -->
+        <div class="scr" style="opacity:{{ op_camera }}; pointer-events:{{ pe_camera }}; background:rgb(17,24,39);">
+          <!-- 상단 오버레이 -->
+          <div style="position:absolute; top:0; left:0; right:0; height:88px; background:linear-gradient(180deg,rgba(0,0,0,0.7),transparent); z-index:10; display:flex; align-items:flex-start; justify-content:space-between; padding:52px 16px 0;">
+            <div class="tappable" style="height:40px; display:flex; align-items:center; gap:6px;" onClick="{{ gotoStretching }}">
+              <div style="width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </div>
+              <span style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.6); letter-spacing:0.08em;">나중에 찍기</span>
+            </div>
+            <div style="height:36px; border-radius:999px; background:rgba(0,0,0,0.4); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.2); display:flex; align-items:center; gap:6px; padding:0 12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+              <span style="font-size:14px; font-weight:600; color:white; letter-spacing:-0.02em;">09:45 left</span>
+            </div>
+          </div>
+          <!-- 카메라 뷰파인더 (중앙) -->
+          <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;">
+            <svg width="60" height="52" viewBox="0 0 24 24" fill="rgb(75,85,99)"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/></svg>
+            <span style="font-size:14px; color:rgb(107,114,128); text-align:center; line-height:1.6;">10분 이내에 스트레칭 하는 모습을<br/>사진으로 찍어주세요!</span>
+          </div>
+          <!-- 하단: 가이드 + 촬영 버튼 -->
+          <div style="position:absolute; bottom:0; left:0; right:0; height:240px; background:linear-gradient(0deg,rgb(17,24,39) 60%,transparent); display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:48px; gap:20px;">
+            <span style="font-size:13px; color:rgba(255,255,255,0.5); letter-spacing:0.04em;">전신이 잘 보이도록 촬영해 보세요</span>
+            <!-- 촬영 버튼 -->
+            <div class="tappable" style="width:72px; height:72px; border-radius:50%; background:white; box-shadow:0 0 0 4px rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center;" onClick="{{ gotoPhotoDoneAndDone }}">
+              <div style="width:56px; height:56px; border-radius:50%; background:white; box-shadow:0 0 0 2px rgb(238,238,238);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ PHOTO DONE (I-2_2) ═══ -->
+        <div class="scr" style="opacity:{{ op_photo_done }}; pointer-events:{{ pe_photo_done }}; background:white;">
+          <div class="scroll">
+            <div class="status-spacer"></div>
+            <!-- Header -->
+            <div style="display:flex; align-items:center; justify-content:center; position:relative; padding:16px; border-bottom:1px solid rgb(238,240,238);">
+              <div class="tappable" style="position:absolute; left:16px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretching }}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="rgb(34,34,34)"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </div>
+              <span style="font-size:18px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">함께하는 스트레칭 완료</span>
+            </div>
+            <!-- 제목 + 설명 -->
+            <div style="padding:32px 24px 0; text-align:center;">
+              <div style="font-size:24px; font-weight:600; color:rgb(17,24,39); letter-spacing:-0.04em; line-height:1.4; margin-bottom:12px;">함께하는 스트레칭을<br/>완료했어요!</div>
+              <div style="font-size:16px; color:rgb(107,114,128); letter-spacing:-0.03em;">친구들에게 사진을 공유해 보세요.</div>
+            </div>
+            <!-- 사진 플레이스홀더 -->
+            <div style="margin:24px 24px 0; border-radius:16px; background:rgb(238,240,238); height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="rgb(168,178,171)"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+              <span style="font-size:13px; color:rgb(185,194,188); letter-spacing:-0.02em;">촬영한 사진</span>
+            </div>
+            <!-- 친구 사진 힌트 -->
+            <div style="margin:16px 24px 0; border-radius:12px; background:rgb(247,247,247); padding:16px; display:flex; align-items:center; gap:12px;">
+              <div style="width:48px; height:48px; border-radius:50%; background:url(assets/friend-sarah.jpg) center/cover; flex-shrink:0;"></div>
+              <div>
+                <div style="font-size:14px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Sarah Miller</div>
+                <div style="font-size:13px; color:rgb(134,143,137);">친구들의 사진을 확인해 보세요</div>
+              </div>
+            </div>
+            <!-- 공유하기 버튼 -->
+            <div style="padding:24px;">
+              <div class="tappable" style="height:56px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center; gap:8px;" onClick="{{ gotoStretching }}">
+                <svg width="16" height="18" viewBox="0 0 24 24" fill="white"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                <span style="font-size:16px; font-weight:600; color:white; letter-spacing:-0.03em;">공유하기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TOAST 알림 ═══ -->
+        <div style="position:absolute; bottom:104px; left:0; right:0; display:flex; justify-content:center; z-index:500; pointer-events:{{ toastPE }}; opacity:{{ toastOp }};">
+          <div class="toast-anim" style="background:rgb(34,34,34); border-radius:20px; padding:12px 20px; display:flex; align-items:center; gap:8px; box-shadow:0 4px 20px rgba(0,0,0,0.25);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="rgb(86,210,255)"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span style="font-size:14px; font-weight:600; color:white; letter-spacing:-0.02em;">알림을 보냈어요</span>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+             GLOBAL NAV BAR (z-index 150)
+        ════════════════════════════════════════ -->
+        <div class="nav-fixed" style="background:white; border-top:1px solid rgb(238,240,238); opacity:{{ navOp }}; pointer-events:{{ navPE }}; display:flex; justify-content:space-around; align-items:flex-start; padding-top:12px;">
+
+          <!-- 홈 -->
+          <div class="nav-btn" onClick="{{ gotoHome }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="{{ ncHome }}">
+              <path d="M22.118 11.9824C22.118 12.6152 21.5906 13.1109 20.993 13.1109H19.868L19.8926 18.743C19.8926 18.8379 19.8855 18.9328 19.875 19.0277V19.5938C19.875 20.3707 19.2457 21 18.4688 21H17.9062C17.8676 21 17.8289 21 17.7902 20.9965C17.741 21 17.6918 21 17.6426 21H16.5H15.6562C14.8793 21 14.25 20.3707 14.25 19.5938V18.75V16.5C14.25 15.8777 13.7473 15.375 13.125 15.375H10.875C10.2527 15.375 9.75 15.8777 9.75 16.5V18.75V19.5938C9.75 20.3707 9.1207 21 8.34375 21H7.5H6.37852C6.32578 21 6.27305 20.9965 6.22031 20.993C6.17812 20.9965 6.13594 21 6.09375 21H5.53125C4.7543 21 4.125 20.3707 4.125 19.5938V15.6562C4.125 15.6246 4.125 15.5895 4.12852 15.5578V13.1109H3C2.36719 13.1109 1.875 12.6188 1.875 11.9824C1.875 11.666 1.98047 11.3848 2.22656 11.1387L11.2406 3.28125C11.4867 3.03516 11.768 3 12.0141 3C12.2602 3 12.5414 3.07031 12.7523 3.24609L21.7312 11.1387C22.0125 11.3848 22.1531 11.666 22.118 11.9824Z"/>
+            </svg>
+            <span style="font-size:10px; font-weight:{{ nfwHome }}; color:{{ ncHome }}; letter-spacing:-0.02em;">홈</span>
+          </div>
+
+          <!-- 친구 -->
+          <div class="nav-btn" onClick="{{ gotoFriends }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="{{ ncFriends }}">
+              <path d="M4.60498 7.93726C4.60498 6.74378 5.07909 5.59919 5.923 4.75528C6.76691 3.91136 7.91151 3.43726 9.10498 3.43726C10.2985 3.43726 11.443 3.91136 12.287 4.75528C13.1309 5.59919 13.605 6.74378 13.605 7.93726C13.605 9.13073 13.1309 10.2753 12.287 11.1192C11.443 11.9632 10.2985 12.4373 9.10498 12.4373C7.91151 12.4373 6.76691 11.9632 5.923 11.1192C5.07909 10.2753 4.60498 9.13073 4.60498 7.93726ZM1.22998 20.3931C1.22998 16.9302 4.03545 14.1248 7.49834 14.1248H10.7116C14.1745 14.1248 16.98 16.9302 16.98 20.3931C16.98 20.9697 16.5124 21.4373 15.9358 21.4373H2.27412C1.69756 21.4373 1.22998 20.9697 1.22998 20.3931ZM22.6507 21.4373H17.8026C17.9925 21.1068 18.105 20.7236 18.105 20.3123V20.031C18.105 17.897 17.1522 15.981 15.6511 14.6943C15.7354 14.6908 15.8163 14.6873 15.9007 14.6873H18.0593C21.1917 14.6873 23.73 17.2255 23.73 20.358C23.73 20.9556 23.2448 21.4373 22.6507 21.4373ZM16.4175 12.4373C15.3276 12.4373 14.3433 11.9943 13.6296 11.2806C14.3222 10.3455 14.73 9.18882 14.73 7.93726C14.73 6.99507 14.4979 6.10562 14.0866 5.32515C14.7405 4.84702 15.5456 4.56226 16.4175 4.56226C18.5937 4.56226 20.355 6.32358 20.355 8.49976C20.355 10.6759 18.5937 12.4373 16.4175 12.4373Z"/>
+            </svg>
+            <span style="font-size:10px; font-weight:{{ nfwFriends }}; color:{{ ncFriends }}; letter-spacing:-0.02em;">친구</span>
+          </div>
+
+          <!-- 타임라인 -->
+          <div class="nav-btn" onClick="{{ gotoTimeline }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="{{ ncTimeline }}">
+              <path d="M5.25 5.25C5.25 4.62773 4.74727 4.125 4.125 4.125C3.50273 4.125 3 4.62773 3 5.25V17.0625C3 18.6164 4.25859 19.875 5.8125 19.875H19.875C20.4973 19.875 21 19.3723 21 18.75C21 18.1277 20.4973 17.625 19.875 17.625H5.8125C5.50312 17.625 5.25 17.3719 5.25 17.0625V5.25ZM19.5445 8.29453C19.984 7.85508 19.984 7.14141 19.5445 6.70195C19.1051 6.2625 18.3914 6.2625 17.952 6.70195L14.25 10.4074L12.232 8.38945C11.7926 7.95 11.0789 7.95 10.6395 8.38945L6.70195 12.327C6.2625 12.7664 6.2625 13.4801 6.70195 13.9195C7.14141 14.359 7.85508 14.359 8.29453 13.9195L11.4375 10.7801L13.4555 12.798C13.8949 13.2375 14.6086 13.2375 15.048 12.798L19.548 8.29805L19.5445 8.29453Z"/>
+            </svg>
+            <span style="font-size:10px; font-weight:{{ nfwTimeline }}; color:{{ ncTimeline }}; letter-spacing:-0.02em;">타임라인</span>
+          </div>
+
+          <!-- 스트레칭 -->
+          <div class="nav-btn" onClick="{{ gotoStretching }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="{{ ncStretch }}">
+              <path d="M12.0002 4.6875C12.0002 4.23995 12.178 3.81072 12.4945 3.49426C12.8109 3.17779 13.2401 3 13.6877 3C14.1352 3 14.5645 3.17779 14.8809 3.49426C15.1974 3.81072 15.3752 4.23995 15.3752 4.6875C15.3752 5.13505 15.1974 5.56428 14.8809 5.88074C14.5645 6.19721 14.1352 6.375 13.6877 6.375C13.2401 6.375 12.8109 6.19721 12.4945 5.88074C12.178 5.56428 12.0002 5.13505 12.0002 4.6875ZM10.8225 10.0066L10.7205 10.0488L10.4393 10.1719C9.8627 10.4285 9.41973 10.9172 9.21934 11.5148L9.12793 11.7891C8.93105 12.3797 8.29473 12.6961 7.7041 12.4992C7.11348 12.3023 6.79707 11.666 6.99395 11.0754L7.08535 10.8012C7.48613 9.60234 8.37207 8.625 9.5252 8.11172L9.80645 7.98867C10.5377 7.66523 11.3287 7.49648 12.1303 7.49648C13.6982 7.49648 15.1115 8.43867 15.7127 9.88359L16.2541 11.1809L17.0064 11.557C17.5619 11.8348 17.7869 12.5098 17.5092 13.0652C17.2314 13.6207 16.5564 13.8457 16.001 13.568L15.0588 13.1004C14.6967 12.9176 14.4119 12.6152 14.2572 12.2391L13.9197 11.4305L13.2412 13.7332L14.9814 15.6316C15.1713 15.8391 15.3049 16.0887 15.3752 16.3629L16.1838 19.6008C16.335 20.202 15.9693 20.8137 15.3646 20.9648C14.76 21.116 14.1518 20.7504 14.0006 20.1457L13.2271 17.0484L10.7416 14.3379C10.2213 13.7719 10.0279 12.9809 10.2248 12.2391L10.8189 10.0066H10.8225ZM8.79043 16.9922L9.66934 14.7984C9.82754 15.0023 9.91543 15.1008L11.3463 16.6617L10.8365 17.9344C10.7521 18.1453 10.6256 18.3387 10.4639 18.5004L8.29473 20.6695C7.85527 21.109 7.1416 21.109 6.70215 20.6695C6.2627 20.2301 6.2627 19.5164 6.70215 19.077L8.79043 16.9922Z"/>
+            </svg>
+            <span style="font-size:10px; font-weight:{{ nfwStretch }}; color:{{ ncStretch }}; letter-spacing:-0.02em;">스트레칭</span>
+          </div>
+
+          <!-- 설정 -->
+          <div class="nav-btn" onClick="{{ gotoSettings }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="{{ ncSettings }}">
+              <path d="M20.4341 8.85703C20.5466 9.16289 20.4517 9.50391 20.2091 9.72187L18.6869 11.107C18.7255 11.3988 18.7466 11.6977 18.7466 12C18.7466 12.3023 18.7255 12.6012 18.6869 12.893L20.2091 14.2781C20.4517 14.4961 20.5466 14.8371 20.4341 15.143C20.2795 15.5613 20.0931 15.9621 19.8787 16.3488L19.7134 16.6336C19.4814 17.0203 19.2212 17.3859 18.9365 17.7305C18.7291 17.9836 18.3845 18.068 18.0752 17.9695L16.117 17.3473C15.6459 17.7094 15.1255 18.0117 14.5701 18.2402L14.1306 20.2477C14.0603 20.5676 13.8142 20.8207 13.4908 20.8734C13.0056 20.9543 12.5064 20.9965 11.9966 20.9965C11.4869 20.9965 10.9877 20.9543 10.5025 20.8734C10.1791 20.8207 9.93297 20.5676 9.86266 20.2477L9.4232 18.2402C8.86773 18.0117 8.34742 17.7094 7.87633 17.3473L5.92164 17.973C5.61226 18.0715 5.26773 17.9836 5.06031 17.734C4.77555 17.3895 4.51539 17.0238 4.28336 16.6371L4.11812 16.3523C3.90367 15.9656 3.71734 15.5648 3.56266 15.1465C3.45016 14.8406 3.54508 14.4996 3.78766 14.2816L5.30992 12.8965C5.27125 12.6012 5.25016 12.3023 5.25016 12C5.25016 11.6977 5.27125 11.3988 5.30992 11.107L3.78766 9.72187C3.54508 9.50391 3.45016 9.16289 3.56266 8.85703C3.71734 8.43867 3.90367 8.03789 4.11812 7.65117L4.28336 7.36641C4.51539 6.97969 4.77555 6.61406 5.06031 6.26953C5.26773 6.01641 5.61226 5.93203 5.92164 6.03047L7.87984 6.65273C8.35094 6.29063 8.87125 5.98828 9.42672 5.75977L9.86617 3.75234C9.93648 3.43242 10.1826 3.1793 10.506 3.12656C10.9912 3.04219 11.4904 3 12.0002 3C12.5099 3 13.0091 3.04219 13.4943 3.12305C13.8177 3.17578 14.0638 3.42891 14.1341 3.74883L14.5736 5.75625C15.1291 5.98477 15.6494 6.28711 16.1205 6.64922L18.0787 6.02695C18.388 5.92852 18.7326 6.01641 18.94 6.26602C19.2248 6.61055 19.4849 6.97617 19.717 7.36289L19.8822 7.64766C20.0966 8.03437 20.283 8.43516 20.4377 8.85352L20.4341 8.85703ZM12.0002 14.8125C12.7461 14.8125 13.4614 14.5162 13.9889 13.9887C14.5163 13.4613 14.8127 12.7459 14.8127 12C14.8127 11.2541 14.5163 10.5387 13.9889 10.0113C13.4614 9.48382 12.7461 9.1875 12.0002 9.1875C11.2542 9.1875 10.5389 9.48382 10.0114 10.0113C9.48397 10.5387 9.18766 11.2541 9.18766 12C9.18766 12.7459 9.48397 13.4613 10.0114 13.9887C10.5389 14.5162 11.2542 14.8125 12.0002 14.8125Z"/>
+            </svg>
+            <span style="font-size:10px; font-weight:{{ nfwSettings }}; color:{{ ncSettings }}; letter-spacing:-0.02em;">설정</span>
+          </div>
+        </div>
+
+      </div><!-- /screen -->
+    </div><!-- /bezel -->
+
+    <!-- Phone label -->
+    <div style="text-align:center; margin-top:16px; font-size:11px; color:rgba(255,255,255,0.25); letter-spacing:0.08em; font-weight:500; text-transform:uppercase;">TURUP! · Interactive Prototype</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 450, &quot;height&quot;: 900}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'splash',
+    notif:  { alex: 'idle', sarah: 'idle', jordan: 'idle', casey: 'idle', elena: 'idle' },
+    notif1: { alex: false, sarah: false, jordan: false, casey: false, elena: false },
+    contact: [false, false, false, false, false, false],
+    addedFriendIds: [],
+    ringTick: 0,
+    toast: false,
+    togetherCard: 'none',
+    searchQuery: '',
+    vcOn: true,
+    stretchIdx: 0,
+    timerSec: 45,
+    timerActive: false,
+    togetherSec: 600,
+  };
+
+  // Stretch guide data
+  stretches = [
+    { title: '목 뒤 늘리기',    img: 'uploads/Background.png',   time: '45초', desc: '목 뒤 근육을 천천히 늘려주는 스트레칭입니다.', instruction: '고개를 천천히 앞으로 숙여\n목 뒤를 늘려보세요' },
+    { title: '머리 위로 팔 뻗기', img: 'uploads/Background-1.png', time: '60초', desc: '어깨와 팔 근육을 위로 뻗어 풀어주는 스트레칭입니다.', instruction: '팔을 들어\n천천히 스트레칭하세요' },
+    { title: '목 옆 늘리기',    img: 'uploads/Background-2.png', time: '60초', desc: '목 옆 근육을 부드럽게 늘려 긴장을 풀어주는 스트레칭입니다.', instruction: '한 손으로 머리를 잡아\n천천히 목을 옆으로 늘려보세요' },
+    { title: '가슴 펴기',       img: 'uploads/Background-3.png', time: '45초', desc: '가슴 근육을 펴서 굽은 등을 교정하는 스트레칭입니다.', instruction: '팔을 뒤로 모아\n가슴을 활짝 펴보세요' },
+  ];
+
+  componentDidMount() {
+    setTimeout(() => this.setState({ screen: 'onboarding' }), 2600);
+  }
+
+  componentWillUnmount() {
+    if (this._stretchTimer) clearInterval(this._stretchTimer);
+    if (this._togetherTimer) clearInterval(this._togetherTimer);
+    if (this._toastTimer) clearTimeout(this._toastTimer);
+  }
+
+  _sendTogether(key) {
+    this.setState(s => ({ notif: { ...s.notif, [key]: 'sent' }, toast: true, togetherCard: 'sent' }));
+    if (this._toastTimer) clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => this.setState({ toast: false }), 2200);
+  }
+
+  componentDidUpdate(_, prevState) {
+    const { screen } = this.state;
+    if (screen !== prevState.screen) {
+      // Clear any existing timers
+      if (this._stretchTimer) { clearInterval(this._stretchTimer); this._stretchTimer = null; }
+      if (this._togetherTimer) { clearInterval(this._togetherTimer); this._togetherTimer = null; }
+      // Start stretch timer on stretch_detail
+      if (screen === 'stretch_detail') {
+        this.setState({ timerSec: 45 });
+        this._stretchTimer = setInterval(() => {
+          const cur = this.state.timerSec;
+          if (cur <= 1) {
+            clearInterval(this._stretchTimer);
+            this._stretchTimer = null;
+            this.setState({ timerSec: 0, screen: 'stretch_complete' });
+          } else {
+            this.setState({ timerSec: cur - 1 });
+          }
+        }, 1000);
+      }
+      // Start together timer
+      if (screen === 'stretch_together') {
+        this.setState({ togetherSec: 600 });
+        this._togetherTimer = setInterval(() => {
+          const cur = this.state.togetherSec;
+          if (cur <= 0) {
+            clearInterval(this._togetherTimer);
+            this._togetherTimer = null;
+          } else {
+            this.setState({ togetherSec: cur - 1 });
+          }
+        }, 1000);
+      }
+    }
+  }
+
+  nav(s) {
+    this.setState({ screen: s, animKey: (this.state.animKey || 0) + 1 });
+  }
+
+  renderVals() {
+    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, togetherCard, animKey = 0, searchQuery = '', addedFriendIds = [] } = this.state;
+
+    // Friend search data
+    const allFriends = [
+      { name: 'Alex Johnson',    id: '@alexj',     img: 'uploads/Background.svg' },
+      { name: 'Sarah Miller',    id: '@sarahm',    img: 'assets/friend-sarah.jpg' },
+      { name: 'Michael Chen',    id: '@mikechen',  img: 'uploads/Background.svg' },
+      { name: 'Jessica Wong',    id: '@jesswong',  img: 'uploads/Background.svg' },
+      { name: 'Jordan Lee',      id: '@jordanl',   img: 'uploads/Background.svg' },
+      { name: 'Casey Wright',    id: '@caseyw',    img: 'uploads/Background.svg' },
+      { name: 'Elena Rodriguez', id: '@elenar',    img: 'uploads/Background.svg' },
+      { name: 'David Smith',     id: '@davidsmith',img: 'uploads/Background.svg' },
+    ];
+    const q = searchQuery.toLowerCase().trim();
+    const filteredFriends = q ? allFriends.filter(f => f.name.toLowerCase().includes(q) || f.id.toLowerCase().includes(q)) : [];
+    const searchResultCount = filteredFriends.length;
+    const st = this.stretches[stretchIdx] || this.stretches[0];
+    const circumference = 439.8; // 2π×70
+    const timerDash = circumference * (1 - timerSec / 45);
+    const timerMin = Math.floor(timerSec / 60);
+    const timerS = timerSec % 60;
+    const timerDisplay = '0' + timerMin + ':' + (timerS < 10 ? '0' : '') + timerS;
+    const tMin = Math.floor(togetherSec / 60);
+    const tSec = togetherSec % 60;
+    const togetherTimer = tMin + ':' + (tSec < 10 ? '0' : '') + tSec;
+
+    const op = (n) => s === n ? 1 : 0;
+    const pe = (n) => s === n ? 'auto' : 'none';
+
+    const NAV = ['home','friends','friends_empty','friend_search','friend_search_results','no_results','timeline','stretching','stretch_together','stretch_together_accept','settings'];
+    const showNav = NAV.includes(s);
+
+    const nc = (arr) => arr.includes(s) ? 'rgb(86,210,255)' : 'rgb(185,194,188)';
+    const nfw = (arr) => arr.includes(s) ? 700 : 400;
+
+    const HOME = ['home'];
+    const FRIENDS = ['friends','friends_empty','friend_search','friend_search_results','no_results'];
+    const TL = ['timeline'];
+    const STR = ['stretching','stretch_detail','stretch_timer','stretch_complete','stretch_together','stretch_together_accept','stretch_together_complete'];
+    const SETTINGS_SCR = ['settings','focus_settings'];
+
+    // 'idle'→blue, 'open'/'sent'→gray
+    const btnBg  = (v) => v === 'idle' ? 'rgb(86,210,255)' : 'rgb(238,240,238)';
+    const btnFg  = (v) => v === 'idle' ? 'rgb(255,255,255)' : 'rgb(168,178,171)';
+    const btnSh  = () => 'none';
+
+    const toggle = (key) => () => {
+      const cur = this.state.notif[key];
+      if (cur === 'idle') this.setState(s => ({ notif: { ...s.notif, [key]: 'open' } }));
+      else this.setState(s => ({ notif: { ...s.notif, [key]: 'idle' } }));
+    };
+    const pick = (key) => () => this.setState(s => ({ notif: { ...s.notif, [key]: 'sent' } }));
+
+    const ctBg    = (v) => v ? 'rgb(255,255,255)' : 'rgb(86,210,255)';
+    const ctFg    = (v) => v ? 'rgb(168,178,171)' : 'rgb(255,255,255)';
+    const ctSh    = (v) => v ? 'inset 0 0 0 1px rgb(238,240,238)' : 'none';
+    const ctLabel = (v) => v ? '추가됨' : '추가';
+
+    return {
+      // New screens
+      op_onboarding: op('onboarding'), pe_onboarding: pe('onboarding'),
+      op_login: op('login'),     pe_login: pe('login'),
+      op_signup: op('signup'),   pe_signup: pe('signup'),
+      op_initial_setup: op('initial_setup'), pe_initial_setup: pe('initial_setup'),
+      op_welcome: op('welcome'), pe_welcome: pe('welcome'),
+      op_stretch_detail: op('stretch_detail'), pe_stretch_detail: pe('stretch_detail'),
+      op_stretch_timer: op('stretch_timer'),   pe_stretch_timer: pe('stretch_timer'),
+      op_stretch_complete: op('stretch_complete'), pe_stretch_complete: pe('stretch_complete'),
+      op_stretch_together: op('stretch_together'), pe_stretch_together: pe('stretch_together'),
+      op_stretch_together_accept: op('stretch_together_accept'), pe_stretch_together_accept: pe('stretch_together_accept'),
+      op_stretch_together_complete: op('stretch_together_complete'), pe_stretch_together_complete: pe('stretch_together_complete'),
+      op_camera: op('camera'), pe_camera: pe('camera'),
+      op_photo_done: op('photo_done'), pe_photo_done: pe('photo_done'),
+      op_settings: op('settings'), pe_settings: pe('settings'),
+      op_focus_settings: op('focus_settings'), pe_focus_settings: pe('focus_settings'),
+
+      // Stretch data
+      stretchTitle: st.title,
+      stretchTime: st.time,
+      stretchDesc: st.desc,
+      stretchInstruction: st.instruction,
+      si0: stretchIdx === 0 ? 'block' : 'none',
+      si1: stretchIdx === 1 ? 'block' : 'none',
+      si2: stretchIdx === 2 ? 'block' : 'none',
+      si3: stretchIdx === 3 ? 'block' : 'none',
+
+      // Timer
+      timerDash, timerDisplay,
+
+      // Voice coach toggle
+      vcBg: vcOn ? 'rgb(86,210,255)' : 'rgb(238,240,238)',
+      vcJustify: vcOn ? 'flex-end' : 'flex-start',
+      toggleVC: () => this.setState(s => ({ vcOn: !s.vcOn })),
+
+      // Together timer
+      togetherTimer,
+
+      // Screens
+      op_splash: op('splash'),   pe_splash: pe('splash'),
+      op_home: op('home'),       pe_home: pe('home'),
+      op_friends: op('friends'), pe_friends: pe('friends'),
+      op_friends_empty: (s === 'friends_empty' || s === 'contact_popup') ? 1 : 0,
+      pe_friends_empty: s === 'friends_empty' ? 'auto' : 'none',
+      op_contact_popup: op('contact_popup'), pe_contact_popup: pe('contact_popup'),
+      op_contact_list: op('contact_list'),   pe_contact_list: pe('contact_list'),
+      op_friend_search: op('friend_search'), pe_friend_search: pe('friend_search'),
+      op_friend_search_results: op('friend_search_results'), pe_friend_search_results: pe('friend_search_results'),
+      op_no_results: op('no_results'), pe_no_results: pe('no_results'),
+      op_timeline: op('timeline'),       pe_timeline: pe('timeline'),
+      op_stretching: op('stretching'),   pe_stretching: pe('stretching'),
+      op_notifications: op('notifications'), pe_notifications: pe('notifications'),
+
+      // Nav
+      navOp: showNav ? 1 : 0,
+      navPE: showNav ? 'auto' : 'none',
+      ncHome: nc(HOME),     nfwHome: nfw(HOME),
+      ncFriends: nc(FRIENDS), nfwFriends: nfw(FRIENDS),
+      ncTimeline: nc(TL),   nfwTimeline: nfw(TL),
+      ncStretch: nc(STR),   nfwStretch: nfw(STR),
+      ncSettings: nc(SETTINGS_SCR), nfwSettings: nfw(SETTINGS_SCR),
+
+      // Search
+      searchQuery,
+      searchResultCount,
+      searchResultLabel: q ? `검색 결과(${searchResultCount})` : '최근 검색',
+      onSearchInput: (e) => {
+        const v = e.target.value;
+        this.setState({ searchQuery: v });
+        if (v.trim()) {
+          this.setState({ screen: 'friend_search_results' });
+        }
+      },
+      onSearchKeyDown: (e) => {
+        if (e.key === 'Enter') {
+          const v = e.target.value.trim();
+          if (v) this.setState({ searchQuery: v, screen: 'friend_search_results' });
+        }
+      },
+      searchResultsEl: React.createElement('div', { style: { display: 'flex', flexDirection: 'column' } },
+        filteredFriends.length === 0 && q ? React.createElement('div', {
+          style: { padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }
+        },
+          React.createElement('img', { src: 'uploads/image 71-4cc96ebe.png', style: { width: 120, height: 120, objectFit: 'contain' } }),
+          React.createElement('div', { style: { fontSize: 16, fontWeight: 600, color: 'rgb(134,143,137)', letterSpacing: '-0.03em' } }, '사용자가 없습니다'),
+          React.createElement('div', { style: { fontSize: 14, color: 'rgb(185,194,188)', letterSpacing: '-0.03em' } }, '다른 ID로 검색해 보세요')
+        ) :
+        filteredFriends.map((f, i) => React.createElement('div', {
+          key: i,
+          style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', borderBottom: i < filteredFriends.length - 1 ? '1px solid rgb(238,240,238)' : 'none' }
+        },
+          React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 12 } },
+            React.createElement('img', { src: f.img, style: { width: 36, height: 36, borderRadius: '9999px', flexShrink: 0, background: 'rgb(238,240,238)' } }),
+            React.createElement('div', null,
+              React.createElement('div', { style: { fontSize: 16, color: 'rgb(101,107,103)', letterSpacing: '-0.03em', fontFamily: "'Pretendard Variable',sans-serif" } }, f.name),
+              React.createElement('div', { style: { fontSize: 12, color: 'rgb(185,194,188)' } }, f.id)
+            )
+          ),
+          React.createElement('div', {
+            className: 'tappable',
+            style: {
+              height: 32, padding: '0 14px', borderRadius: 6,
+              display: 'flex', alignItems: 'center', cursor: 'pointer', flexShrink: 0,
+              background: addedFriendIds.includes(f.id) ? 'rgb(238,240,238)' : 'rgb(86,210,255)',
+            },
+            onClick: addedFriendIds.includes(f.id) ? undefined : () => {
+              this.setState(prev => ({
+                addedFriendIds: [...prev.addedFriendIds, f.id],
+                screen: 'friends',
+              }));
+            },
+          }, React.createElement('span', {
+            style: { fontSize: 12, fontWeight: 600, color: addedFriendIds.includes(f.id) ? 'rgb(168,178,171)' : 'white' }
+          }, addedFriendIds.includes(f.id) ? '추가됨' : '추가'))
+        ))
+      ),
+
+      // Animation key (alternates A/B to re-trigger CSS animations on screen re-enter)
+      barAnim: animKey % 2 === 0 ? 'barGrowA' : 'barGrowB',
+      pbAnim:  animKey % 2 === 0 ? 'pbGrowA'  : 'pbGrowB',
+      ak: animKey,
+
+      // Toast
+      toastOp: toast ? 1 : 0,
+      toastPE: toast ? 'auto' : 'none',
+
+      // Together card state
+      tc_none:     togetherCard === 'none'     ? 'flex' : 'none',
+      tc_sent:     togetherCard === 'sent'     ? 'flex' : 'none',
+      tc_received: togetherCard === 'received' ? 'flex' : 'none',
+      tc_done:     togetherCard === 'done'     ? 'flex' : 'none',
+      gotoCamera:     () => this.nav('camera'),
+      gotoPhotoDone:  () => this.nav('photo_done'),
+      gotoPhotoDoneAndDone: () => this.setState({ screen: 'photo_done', togetherCard: 'done' }),
+      acceptTogether: () => this.setState({ togetherCard: 'sent' }),
+      rejectTogether: () => this.setState({ togetherCard: 'none' }),
+      receiveTogether: () => this.setState({ screen: 'stretching', togetherCard: 'received' }),
+
+      // Ring animation — A/B 교번으로 매 진입 시 재시작
+      ringAnim: ringTick % 2 === 0
+        ? 'ringFillA 1.6s'
+        : 'ringFillB 1.6s',
+
+      // Navigate — new screens
+      gotoOnboarding:        () => this.nav('onboarding'),
+      gotoLogin:             () => this.nav('login'),
+      gotoSignup:            () => this.nav('signup'),
+      gotoInitialSetup:      () => this.nav('initial_setup'),
+      gotoWelcome:           () => this.nav('welcome'),
+      gotoStretchDetail:     () => this.nav('stretch_detail'),
+      gotoStretchTimer:      () => this.nav('stretch_timer'),
+      gotoStretchComplete:   () => this.nav('stretch_complete'),
+      gotoStretchTogether:   () => this.nav('stretch_together'),
+      gotoStretchTogetherAccept: () => this.nav('stretch_together_accept'),
+      gotoStretchTogetherComplete: () => this.nav('stretch_together_complete'),
+      gotoSettings:          () => this.nav('settings'),
+      gotoFocusSettings:     () => this.nav('focus_settings'),
+
+      // Stretch guide shortcuts
+      gotoStretch0: () => this.setState({ screen: 'stretch_detail', stretchIdx: 0 }),
+      gotoStretch1: () => this.setState({ screen: 'stretch_detail', stretchIdx: 1 }),
+      gotoStretch2: () => this.setState({ screen: 'stretch_detail', stretchIdx: 2 }),
+      gotoStretch3: () => this.setState({ screen: 'stretch_detail', stretchIdx: 3 }),
+
+      // Navigate
+      gotoHome:              () => this.nav('home'),
+      gotoFriends:           () => this.nav(addedFriendIds.length > 0 ? 'friends' : 'friends_empty'),
+      gotoFriendsList:       () => this.nav('friends'),
+      gotoFriendsEmpty:      () => this.nav('friends_empty'),
+      gotoContactPopup:      () => this.nav('contact_popup'),
+      gotoContactList:       () => this.nav('contact_list'),
+      gotoFriendSearch:      () => this.nav('friend_search'),
+      gotoFriendSearchResults: () => this.nav('friend_search_results'),
+      gotoNoResults:           () => this.nav('no_results'),
+      gotoTimeline:          () => this.setState(s => ({ screen: 'timeline', ringTick: s.ringTick + 1 })),
+      gotoStretching:        () => this.nav('stretching'),
+      gotoNotifications:     () => this.nav('notifications'),
+      gotoBackToHome:        () => this.nav('home'),
+      gotoBackToFriends:     () => this.nav(addedFriendIds.length > 0 ? 'friends' : 'friends_empty'),
+      gotoBackToFriendsEmpty: () => this.nav('friends_empty'),
+      gotoBackToFriendSearch: () => {
+        const anyAdded = this.state.contact.some(c => c);
+        this.nav(anyAdded ? 'friends' : 'friends_empty');
+      },
+
+      // Notification buttons
+      alexBg: btnBg(notif.alex), alexFg: btnFg(notif.alex), alexSh: btnSh(),
+      sarahBg: btnBg(notif.sarah), sarahFg: btnFg(notif.sarah), sarahSh: btnSh(),
+      jordanBg: btnBg(notif.jordan), jordanFg: btnFg(notif.jordan), jordanSh: btnSh(),
+      caseyBg: btnBg(notif.casey), caseyFg: btnFg(notif.casey), caseySh: btnSh(),
+      elenaBg: btnBg(notif.elena), elenaFg: btnFg(notif.elena), elenaSh: btnSh(),
+
+      // Inline expansion (not dropdown)
+      alexExpand:   notif.alex   !== 'idle' ? 'flex' : 'none',
+      sarahExpand:  notif.sarah  !== 'idle' ? 'flex' : 'none',
+      jordanExpand: notif.jordan !== 'idle' ? 'flex' : 'none',
+      caseyExpand:  notif.casey  !== 'idle' ? 'flex' : 'none',
+      elenaExpand:  notif.elena  !== 'idle' ? 'flex' : 'none',
+
+      // Right action card state (sent = gray)
+      alexCard2Bg:  notif.alex   === 'sent' ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      sarahCard2Bg: notif.sarah  === 'sent' ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      jordanCard2Bg:notif.jordan === 'sent' ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      caseyCard2Bg: notif.casey  === 'sent' ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      elenaCard2Bg: notif.elena  === 'sent' ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      alexCard2Sh:  notif.alex   === 'sent' ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      sarahCard2Sh: notif.sarah  === 'sent' ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      jordanCard2Sh:notif.jordan === 'sent' ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      caseyCard2Sh: notif.casey  === 'sent' ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      elenaCard2Sh: notif.elena  === 'sent' ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      alexCard2Fg:  notif.alex   === 'sent' ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      sarahCard2Fg: notif.sarah  === 'sent' ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      jordanCard2Fg:notif.jordan === 'sent' ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      caseyCard2Fg: notif.casey  === 'sent' ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      elenaCard2Fg: notif.elena  === 'sent' ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      alexCard2Label:  notif.alex   === 'sent' ? '알림을 보냈어요' : '스트레칭 같이해요',
+      sarahCard2Label: notif.sarah  === 'sent' ? '알림을 보냈어요' : '스트레칭 같이해요',
+      jordanCard2Label:notif.jordan === 'sent' ? '알림을 보냈어요' : '스트레칭 같이해요',
+      caseyCard2Label: notif.casey  === 'sent' ? '알림을 보냈어요' : '스트레칭 같이해요',
+      elenaCard2Label: notif.elena  === 'sent' ? '알림을 보냈어요' : '스트레칭 같이해요',
+
+      // Row background: #FFFFFF(idle) → #F7F7F7(open/sent)
+      alexRowBg:   notif.alex   !== 'idle' ? 'rgb(247,247,247)' : 'rgb(255,255,255)',
+      sarahRowBg:  notif.sarah  !== 'idle' ? 'rgb(247,247,247)' : 'rgb(255,255,255)',
+      jordanRowBg: notif.jordan !== 'idle' ? 'rgb(247,247,247)' : 'rgb(255,255,255)',
+      caseyRowBg:  notif.casey  !== 'idle' ? 'rgb(247,247,247)' : 'rgb(255,255,255)',
+      elenaRowBg:  notif.elena  !== 'idle' ? 'rgb(247,247,247)' : 'rgb(255,255,255)',
+
+      // Sarah action card
+      sarahActionBg: notif.sarah !== 'idle' ? 'rgb(220,224,222)' : 'white',
+      sarahActionSh: notif.sarah !== 'idle' ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      sarahActionFg: notif.sarah !== 'idle' ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      sarahActionLabel: notif.sarah !== 'idle' ? '알림을 보냈어요' : '스트레칭 같이해요',
+
+      sendAlex:   toggle('alex'),
+      sendSarah:  toggle('sarah'),
+      sendJordan: toggle('jordan'),
+      sendCasey:  toggle('casey'),
+      sendElena:  toggle('elena'),
+      // Card1 state (스트레칭 하세요!)
+      alexCard1Bg:   notif1.alex   ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      sarahCard1Bg:  notif1.sarah  ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      jordanCard1Bg: notif1.jordan ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      caseyCard1Bg:  notif1.casey  ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      elenaCard1Bg:  notif1.elena  ? 'rgb(220,224,222)' : 'rgb(255,255,255)',
+      alexCard1Sh:   notif1.alex   ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      sarahCard1Sh:  notif1.sarah  ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      jordanCard1Sh: notif1.jordan ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      caseyCard1Sh:  notif1.casey  ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      elenaCard1Sh:  notif1.elena  ? 'none' : 'inset 0 0 0 1px rgb(86,210,255)',
+      alexCard1Fg:   notif1.alex   ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      sarahCard1Fg:  notif1.sarah  ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      jordanCard1Fg: notif1.jordan ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      caseyCard1Fg:  notif1.casey  ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      elenaCard1Fg:  notif1.elena  ? 'rgb(185,194,188)' : 'rgb(86,210,255)',
+      alexCard1Label:   notif1.alex   ? '알림을 보냈어요' : '스트레칭 하세요!',
+      sarahCard1Label:  notif1.sarah  ? '알림을 보냈어요' : '스트레칭 하세요!',
+      jordanCard1Label: notif1.jordan ? '알림을 보냈어요' : '스트레칭 하세요!',
+      caseyCard1Label:  notif1.casey  ? '알림을 보냈어요' : '스트레칭 하세요!',
+      elenaCard1Label:  notif1.elena  ? '알림을 보냈어요' : '스트레칭 하세요!',
+
+      // Handlers
+      alexOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, alex: true } })),
+      alexOpt2:  () => this._sendTogether('alex'),
+      sarahOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, sarah: true } })),
+      sarahOpt2: () => this._sendTogether('sarah'),
+      jordanOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, jordan: true } })),
+      jordanOpt2: () => this._sendTogether('jordan'),
+      caseyOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, casey: true } })),
+      caseyOpt2:  () => this._sendTogether('casey'),
+      elenaOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, elena: true } })),
+      elenaOpt2:  () => this._sendTogether('elena'),
+
+      // Contact add
+      ct1Bg: ctBg(contact[0]), ct1Fg: ctFg(contact[0]), ct1Sh: ctSh(contact[0]), ct1Label: ctLabel(contact[0]),
+      ct2Bg: ctBg(contact[1]), ct2Fg: ctFg(contact[1]), ct2Sh: ctSh(contact[1]), ct2Label: ctLabel(contact[1]),
+      ct3Bg: ctBg(contact[2]), ct3Fg: ctFg(contact[2]), ct3Sh: ctSh(contact[2]), ct3Label: ctLabel(contact[2]),
+      ct4Bg: ctBg(contact[3]), ct4Fg: ctFg(contact[3]), ct4Sh: ctSh(contact[3]), ct4Label: ctLabel(contact[3]),
+      ct5Bg: ctBg(contact[4]), ct5Fg: ctFg(contact[4]), ct5Sh: ctSh(contact[4]), ct5Label: ctLabel(contact[4]),
+      ct6Bg: ctBg(contact[5]), ct6Fg: ctFg(contact[5]), ct6Sh: ctSh(contact[5]), ct6Label: ctLabel(contact[5]),
+
+      addContact1: () => this.setState(s => { const c=[...s.contact]; c[0]=true; return {contact:c}; }),
+      addContact2: () => this.setState(s => { const c=[...s.contact]; c[1]=true; return {contact:c}; }),
+      addContact3: () => this.setState(s => { const c=[...s.contact]; c[2]=true; return {contact:c}; }),
+      addContact4: () => this.setState(s => { const c=[...s.contact]; c[3]=true; return {contact:c}; }),
+      addContact5: () => this.setState(s => { const c=[...s.contact]; c[4]=true; return {contact:c}; }),
+      addContact6: () => this.setState(s => { const c=[...s.contact]; c[5]=true; return {contact:c}; }),
+    };
+  }
+}
+</script>
+</body>
+</html>

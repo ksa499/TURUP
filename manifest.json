@@ -1,0 +1,18 @@
+{
+  "name": "TURUP!",
+  "short_name": "TURUP!",
+  "description": "자세 교정 스트레칭 앱",
+  "start_url": "/TURUP/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#56D2FF",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/splash-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
