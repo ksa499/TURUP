@@ -53,7 +53,6 @@
     .ring-outer { animation: ringGlow 3s ease-in-out infinite; }
     .ring-inner { animation: ringGlow 3s ease-in-out infinite .5s; }
     .status-spacer { height: env(safe-area-inset-top, 0px); }
-    input, textarea, select { font-size: 16px !important; }
     @keyframes ringFillA {
       from { stroke-dashoffset: 603.2; }
       to   { stroke-dashoffset: 96.5; }
@@ -478,7 +477,7 @@
             <div style="padding:16px 24px;">
               <div id="searchWrap" style="height:48px; background:white; border-radius:8px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; align-items:center; gap:8px; padding:0 12px;" onClick="this.querySelector('input').focus()">
                 <svg id="searchIcon" width="16" height="16" viewBox="0 0 24 24" fill="rgb(185,194,188)" style="flex-shrink:0;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                <input type="text" placeholder="닉네임을 검색해 보세요"
+                <input type="text" placeholder="닉네임을 검색해 보세요" value="{{ searchQuery }}"
                   onFocus="document.getElementById('searchWrap').style.boxShadow='inset 0 0 0 2px rgb(86,210,255)';document.getElementById('searchIcon').setAttribute('fill','rgb(86,210,255)')"
                   onBlur="document.getElementById('searchWrap').style.boxShadow='inset 0 0 0 1px rgb(238,240,238)';document.getElementById('searchIcon').setAttribute('fill','rgb(185,194,188)')"
                   onInput="{{ onSearchInput }}"
@@ -1827,7 +1826,7 @@ class Component extends DCLogic {
       gotoFriendsEmpty:      () => this.nav('friends_empty'),
       gotoContactPopup:      () => this.nav('contact_popup'),
       gotoContactList:       () => this.nav('contact_list'),
-      gotoFriendSearch:      () => this.setState({ screen: 'friend_search', searchQuery: '' }),
+      gotoFriendSearch:      () => this.setState(s => ({ screen: 'friend_search', searchQuery: '', animKey: (s.animKey || 0) + 1 })),
       gotoFriendSearchResults: () => this.nav('friend_search_results'),
       gotoNoResults:           () => this.nav('no_results'),
       gotoTimeline:          () => this.setState(s => ({ screen: 'timeline', ringTick: s.ringTick + 1 })),
