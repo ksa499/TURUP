@@ -1004,11 +1004,11 @@
               <div style="font-size:12px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px;">알림 설정</div>
               <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgb(238,240,238);">
                 <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">스트레칭 알림</div><div style="font-size:13px; color:rgb(168,178,171);">매 1시간마다 알림 전송</div></div>
-                <div style="width:44px; height:26px; border-radius:999px; background:rgb(86,210,255); display:flex; align-items:center; padding:0 3px; justify-content:flex-end;"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
+                <div class="tappable" style="width:44px; height:26px; border-radius:999px; background:{{ snBg }}; display:flex; align-items:center; padding:0 3px; justify-content:{{ snJust }}; flex-shrink:0;" onClick="{{ toggleSN }}"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
               </div>
               <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0;">
                 <div><div style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">친구 알림</div><div style="font-size:13px; color:rgb(168,178,171);">친구 활동 알림 수신</div></div>
-                <div style="width:44px; height:26px; border-radius:999px; background:rgb(86,210,255); display:flex; align-items:center; padding:0 3px; justify-content:flex-end;"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
+                <div class="tappable" style="width:44px; height:26px; border-radius:999px; background:{{ fnBg }}; display:flex; align-items:center; padding:0 3px; justify-content:{{ fnJust }}; flex-shrink:0;" onClick="{{ toggleFN }}"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
               </div>
             </div>
             <!-- 집중 모드 -->
@@ -1314,11 +1314,11 @@
               <div style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 0 16px rgba(0,0,0,.05);">
                 <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-bottom:1px solid rgb(238,240,238);">
                   <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">백그라운드 알림 설정</span>
-                  <div style="width:44px; height:26px; border-radius:999px; background:rgb(86,210,255); display:flex; align-items:center; padding:0 3px; justify-content:flex-end; flex-shrink:0;"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
+                  <div class="tappable" style="width:44px; height:26px; border-radius:999px; background:{{ bgNBg }}; display:flex; align-items:center; padding:0 3px; justify-content:{{ bgNJust }}; flex-shrink:0;" onClick="{{ toggleBGN }}"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
                 </div>
                 <div style="display:flex; align-items:center; justify-content:space-between; padding:16px;">
                   <span style="font-size:16px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">메일로 알림 받기</span>
-                  <div style="width:44px; height:26px; border-radius:999px; background:rgb(86,210,255); display:flex; align-items:center; padding:0 3px; justify-content:flex-end; flex-shrink:0;"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
+                  <div class="tappable" style="width:44px; height:26px; border-radius:999px; background:{{ emNBg }}; display:flex; align-items:center; padding:0 3px; justify-content:{{ emNJust }}; flex-shrink:0;" onClick="{{ toggleEMN }}"><div style="width:20px; height:20px; border-radius:50%; background:white;"></div></div>
                 </div>
               </div>
             </div>
@@ -1523,6 +1523,10 @@ class Component extends DCLogic {
     ringTick: 0,
     toast: false,
     toastMsg: '',
+    toggleStretchNotif: true,
+    toggleFriendNotif: true,
+    toggleBgNotif: true,
+    toggleEmailNotif: true,
     togetherCard: 'none',
     searchQuery: '',
     vcOn: true,
@@ -1597,7 +1601,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', togetherCard, animKey = 0, searchQuery = '', addedFriendIds = [] } = this.state;
+    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', togetherCard, animKey = 0, searchQuery = '', addedFriendIds = [], toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true } = this.state;
 
     // Friend search data
     const allFriends = [
@@ -1780,6 +1784,20 @@ class Component extends DCLogic {
       barAnim: animKey % 2 === 0 ? 'barGrowA' : 'barGrowB',
       pbAnim:  animKey % 2 === 0 ? 'pbGrowA'  : 'pbGrowB',
       ak: animKey,
+
+      // Notification toggles
+      snBg:    toggleStretchNotif ? 'rgb(86,210,255)' : 'rgb(220,224,222)',
+      snJust:  toggleStretchNotif ? 'flex-end' : 'flex-start',
+      fnBg:    toggleFriendNotif  ? 'rgb(86,210,255)' : 'rgb(220,224,222)',
+      fnJust:  toggleFriendNotif  ? 'flex-end' : 'flex-start',
+      bgNBg:   toggleBgNotif      ? 'rgb(86,210,255)' : 'rgb(220,224,222)',
+      bgNJust: toggleBgNotif      ? 'flex-end' : 'flex-start',
+      emNBg:   toggleEmailNotif   ? 'rgb(86,210,255)' : 'rgb(220,224,222)',
+      emNJust: toggleEmailNotif   ? 'flex-end' : 'flex-start',
+      toggleSN:  () => this.setState(s => ({ toggleStretchNotif: !s.toggleStretchNotif })),
+      toggleFN:  () => this.setState(s => ({ toggleFriendNotif:  !s.toggleFriendNotif })),
+      toggleBGN: () => this.setState(s => ({ toggleBgNotif:      !s.toggleBgNotif })),
+      toggleEMN: () => this.setState(s => ({ toggleEmailNotif:   !s.toggleEmailNotif })),
 
       // Toast
       toastOp: toast ? 1 : 0,
