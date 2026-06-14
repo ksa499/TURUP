@@ -1027,17 +1027,17 @@
             <div style="margin:16px 24px 0; background:white; border-radius:12px; padding:20px; box-shadow:0 0 16px rgba(0,0,0,.05);">
               <div style="font-size:12px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px;">목표 설정</div>
               <div style="display:flex; gap:8px;">
-                <div style="flex:1; border-radius:8px; padding:12px; box-shadow:inset 0 0 0 2px rgb(86,210,255); display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div class="tappable" style="flex:1; border-radius:8px; padding:12px; box-shadow:{{ gl1Sh }}; display:flex; flex-direction:column; align-items:center; gap:4px;" onClick="{{ setGoal1 }}">
                   <span style="font-size:20px;">🔰</span>
-                  <span style="font-size:12px; font-weight:600; color:rgb(86,210,255);">초급</span>
+                  <span style="font-size:12px; font-weight:{{ gl1Fw }}; color:{{ gl1Fg }};">초급</span>
                 </div>
-                <div style="flex:1; border-radius:8px; padding:12px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div class="tappable" style="flex:1; border-radius:8px; padding:12px; box-shadow:{{ gl2Sh }}; display:flex; flex-direction:column; align-items:center; gap:4px;" onClick="{{ setGoal2 }}">
                   <span style="font-size:20px;">⚡</span>
-                  <span style="font-size:12px; color:rgb(168,178,171);">중급</span>
+                  <span style="font-size:12px; font-weight:{{ gl2Fw }}; color:{{ gl2Fg }};">중급</span>
                 </div>
-                <div style="flex:1; border-radius:8px; padding:12px; box-shadow:inset 0 0 0 1px rgb(238,240,238); display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div class="tappable" style="flex:1; border-radius:8px; padding:12px; box-shadow:{{ gl3Sh }}; display:flex; flex-direction:column; align-items:center; gap:4px;" onClick="{{ setGoal3 }}">
                   <span style="font-size:20px;">🏆</span>
-                  <span style="font-size:12px; color:rgb(168,178,171);">고급</span>
+                  <span style="font-size:12px; font-weight:{{ gl3Fw }}; color:{{ gl3Fg }};">고급</span>
                 </div>
               </div>
             </div>
@@ -1523,6 +1523,7 @@ class Component extends DCLogic {
     ringTick: 0,
     toast: false,
     toastMsg: '',
+    goalLevel: '초급',
     toggleStretchNotif: true,
     toggleFriendNotif: true,
     toggleBgNotif: true,
@@ -1601,7 +1602,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', togetherCard, animKey = 0, searchQuery = '', addedFriendIds = [], toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true } = this.state;
+    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', togetherCard, animKey = 0, searchQuery = '', addedFriendIds = [], goalLevel = '초급', toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true } = this.state;
 
     // Friend search data
     const allFriends = [
@@ -1784,6 +1785,20 @@ class Component extends DCLogic {
       barAnim: animKey % 2 === 0 ? 'barGrowA' : 'barGrowB',
       pbAnim:  animKey % 2 === 0 ? 'pbGrowA'  : 'pbGrowB',
       ak: animKey,
+
+      // Goal level buttons
+      gl1Sh: goalLevel === '초급' ? 'inset 0 0 0 2px rgb(86,210,255)' : 'inset 0 0 0 1px rgb(238,240,238)',
+      gl1Fg: goalLevel === '초급' ? 'rgb(86,210,255)' : 'rgb(168,178,171)',
+      gl1Fw: goalLevel === '초급' ? '600' : '400',
+      gl2Sh: goalLevel === '중급' ? 'inset 0 0 0 2px rgb(86,210,255)' : 'inset 0 0 0 1px rgb(238,240,238)',
+      gl2Fg: goalLevel === '중급' ? 'rgb(86,210,255)' : 'rgb(168,178,171)',
+      gl2Fw: goalLevel === '중급' ? '600' : '400',
+      gl3Sh: goalLevel === '고급' ? 'inset 0 0 0 2px rgb(86,210,255)' : 'inset 0 0 0 1px rgb(238,240,238)',
+      gl3Fg: goalLevel === '고급' ? 'rgb(86,210,255)' : 'rgb(168,178,171)',
+      gl3Fw: goalLevel === '고급' ? '600' : '400',
+      setGoal1: () => this.setState({ goalLevel: '초급' }),
+      setGoal2: () => this.setState({ goalLevel: '중급' }),
+      setGoal3: () => this.setState({ goalLevel: '고급' }),
 
       // Notification toggles
       snBg:    toggleStretchNotif ? 'rgb(86,210,255)' : 'rgb(220,224,222)',
