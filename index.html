@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="TURUP!">
 <meta name="theme-color" content="#56D2FF">
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icon.png">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -17,7 +18,7 @@
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Pretendard Variable', 'Noto Sans KR', -apple-system, sans-serif; background: #0f172a; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    body, html { font-family: 'Pretendard Variable', 'Noto Sans KR', -apple-system, sans-serif; margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: white; }
     .scr { position: absolute; inset: 0; }
     .nav-fixed { position: absolute; bottom: 0; left: 0; right: 0; height: 89px; z-index: 9999; transform: translateZ(0); will-change: transform; }
     .scroll { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
@@ -63,14 +64,8 @@
   </style>
 </helmet>
 
-<!-- Outer wrapper -->
-<div style="min-height:100vh; background:linear-gradient(135deg,#0f172a,#1e293b); display:flex; justify-content:center; align-items:center; padding:20px;">
-  <!-- Phone shell -->
-  <div style="position:relative; width:393px; flex-shrink:0;">
-    <!-- Outer bezel -->
-    <div style="background:#1c1c1e; border-radius:56px; padding:10px; box-shadow:0 0 0 2px #3a3a3c, 0 50px 100px rgba(0,0,0,0.9), 0 0 60px rgba(86,210,255,0.08);">
-      <!-- Screen area 375×812 -->
-      <div style="position:relative; width:375px; height:812px; background:white; border-radius:48px; overflow:hidden;">
+<!-- PWA full-screen container -->
+<div style="position:fixed; inset:0; background:white; overflow:hidden;">
 
 
         <!-- ═══════════════════════════════════════
@@ -1515,11 +1510,6 @@
         </div>
 
       </div><!-- /screen -->
-    </div><!-- /bezel -->
-
-    <!-- Phone label -->
-    <div style="text-align:center; margin-top:16px; font-size:11px; color:rgba(255,255,255,0.25); letter-spacing:0.08em; font-weight:500; text-transform:uppercase;">TURUP! · Interactive Prototype</div>
-  </div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 450, &quot;height&quot;: 900}}">

@@ -4,14 +4,14 @@
   "description": "자세 교정 스트레칭 앱",
   "start_url": "/TURUP/",
   "display": "standalone",
-  "background_color": "#0f172a",
+  "background_color": "#ffffff",
   "theme_color": "#56D2FF",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "assets/splash-logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "assets/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]
