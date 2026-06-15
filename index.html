@@ -1101,21 +1101,21 @@
             </div>
           </div>
           <!-- Main: space-between layout -->
-          <div style="position:absolute; top:111px; left:0; right:0; bottom:0; display:flex; flex-direction:column; align-items:center; justify-content:space-between; padding:40px 24px 48px;">
-            <!-- 이미지 327×327 -->
-            <div style="width:100%; aspect-ratio:1; border-radius:16px; overflow:hidden; background:rgb(238,240,238); flex-shrink:0;">
+          <div style="position:absolute; top:111px; left:0; right:0; bottom:0; display:flex; flex-direction:column; align-items:center; justify-content:space-between; padding:16px 24px 28px;">
+            <!-- 이미지 (고정 크기) -->
+            <div style="width:210px; height:210px; border-radius:16px; overflow:hidden; background:rgb(238,240,238); flex-shrink:0;">
               <img src="uploads/Background.png" style="display:{{ si0 }}; width:100%; height:100%; object-fit:cover;"/>
               <img src="uploads/Background-1.png" style="display:{{ si1 }}; width:100%; height:100%; object-fit:cover;"/>
               <img src="uploads/Background-2.png" style="display:{{ si2 }}; width:100%; height:100%; object-fit:cover;"/>
               <img src="uploads/Background-3.png" style="display:{{ si3 }}; width:100%; height:100%; object-fit:cover;"/>
             </div>
             <!-- 설명 텍스트 -->
-            <div style="text-align:center; font-size:18px; font-weight:500; color:rgb(55,65,81); letter-spacing:-0.025em; line-height:1.6;">{{ stretchInstruction }}</div>
+            <div style="text-align:center; font-size:16px; font-weight:500; color:rgb(55,65,81); letter-spacing:-0.025em; line-height:1.5;">{{ stretchInstruction }}</div>
             <!-- 타이머 -->
-            <div style="font-size:52px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.06em; line-height:1; font-variant-numeric:tabular-nums;">{{ timerDisplay }}</div>
+            <div style="font-size:48px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.06em; line-height:1; font-variant-numeric:tabular-nums;">{{ timerDisplay }}</div>
             <!-- 종료 버튼 -->
-            <div class="tappable" style="width:100%; height:56px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretchComplete }}">
-              <span style="font-size:18px; font-weight:600; color:white; letter-spacing:-0.03em;">종료</span>
+            <div class="tappable" style="width:100%; height:52px; background:rgb(86,210,255); border-radius:12px; display:flex; align-items:center; justify-content:center;" onClick="{{ gotoStretchComplete }}">
+              <span style="font-size:17px; font-weight:600; color:white; letter-spacing:-0.03em;">종료</span>
             </div>
           </div>
         </div>
