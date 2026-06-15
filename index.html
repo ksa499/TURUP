@@ -1785,7 +1785,7 @@ class Component extends DCLogic {
               if (this._toastTimer) clearTimeout(this._toastTimer);
               this.setState({ toast: false });
               requestAnimationFrame(() => {
-                this.setState({ toast: true, toastMsg: f.name + '을(를) 추가했어요' });
+                this.setState({ toast: true, toastMsg: '친구 요청을 보냈습니다.' });
                 this._toastTimer = setTimeout(() => this.setState({ toast: false }), 2200);
               });
             },
