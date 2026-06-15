@@ -1469,6 +1469,9 @@
           </div>
         </div>
 
+        <!-- 카메라 input (실제 카메라 접근) -->
+        <input id="turup-camera-input" type="file" accept="image/*" capture="environment" style="display:none;"/>
+
         <!-- ═══ TOAST 알림 ═══ -->
         <div style="position:absolute; bottom:104px; left:0; right:0; display:flex; justify-content:center; z-index:500; pointer-events:{{ toastPE }}; opacity:{{ toastOp }};">
           <div key="{{ toastKey }}" class="toast-anim" style="background:rgb(34,34,34); border-radius:20px; padding:12px 20px; display:flex; align-items:center; gap:8px; box-shadow:0 4px 20px rgba(0,0,0,0.25);">
@@ -1858,7 +1861,16 @@ class Component extends DCLogic {
       tc_sent:     togetherCard === 'sent'     ? 'flex' : 'none',
       tc_received: togetherCard === 'received' ? 'flex' : 'none',
       tc_done:     togetherCard === 'done'     ? 'flex' : 'none',
-      gotoCamera:     () => this.nav('camera'),
+      gotoCamera: () => {
+        const input = document.getElementById('turup-camera-input');
+        input.onchange = (e) => {
+          if (e.target.files && e.target.files[0]) {
+            this.setState({ screen: 'photo_done', togetherCard: 'done' });
+          }
+          input.value = '';
+        };
+        input.click();
+      },
       gotoPhotoDone:  () => this.nav('photo_done'),
       gotoPhotoDoneAndDone: () => this.setState({ screen: 'photo_done', togetherCard: 'done' }),
       acceptTogether: () => this.setState({ togetherCard: 'sent' }),
