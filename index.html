@@ -33,6 +33,13 @@
     @keyframes pbGrowB  { from{transform:scaleX(0); transform-origin:left} to{transform:scaleX(1); transform-origin:left} }
     .bar-fill { animation-duration:.85s; animation-timing-function:cubic-bezier(.25,.46,.45,.94); animation-fill-mode:both; transform-origin:bottom center; }
     .pb-fill  { animation-duration:1s;   animation-timing-function:cubic-bezier(.25,.46,.45,.94); animation-fill-mode:both; transform-origin:left; transform-box:fill-box; }
+    @keyframes pushSlideIn {
+      0%   { transform: translateY(-110%); opacity: 0; }
+      12%  { transform: translateY(0);    opacity: 1; }
+      80%  { transform: translateY(0);    opacity: 1; }
+      100% { transform: translateY(-110%); opacity: 0; }
+    }
+    .push-banner { animation: pushSlideIn 5s cubic-bezier(.22,.61,.36,1) both; }
     @keyframes toastIn { 0%{opacity:0;transform:translateY(16px)} 15%,85%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(0)} }
     .toast-anim { animation: toastIn 2.2s ease both; }
     @keyframes splashPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
@@ -1466,6 +1473,21 @@
           </div>
         </div>
 
+        <!-- ═══ iOS 스타일 PUSH NOTIFICATION 배너 ═══ -->
+        <div style="position:absolute; top:calc(env(safe-area-inset-top, 0px) + 8px); left:12px; right:12px; z-index:9999; opacity:{{ pushNotifOp }}; pointer-events:{{ pushNotifPE }}; transition:opacity 0.2s;">
+          <div key="{{ pushNotifKey }}" class="push-banner" style="background:rgba(250,250,252,0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:16px; padding:12px 14px; box-shadow:0 2px 24px rgba(0,0,0,0.18); display:flex; align-items:flex-start; gap:10px;" onClick="{{ dismissPush }}">
+            <img src="assets/icon.png" style="width:36px; height:36px; border-radius:8px; flex-shrink:0;"/>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1px;">
+                <span style="font-size:11px; font-weight:600; color:rgb(134,143,137); letter-spacing:0.02em; text-transform:uppercase;">TURUP!</span>
+                <span style="font-size:11px; color:rgb(185,194,188);">방금</span>
+              </div>
+              <div style="font-size:13px; font-weight:600; color:rgb(17,24,39); letter-spacing:-0.02em;">Sarah Miller</div>
+              <div style="font-size:13px; color:rgb(55,65,81); letter-spacing:-0.02em;">스트레칭 하세요! 🤸</div>
+            </div>
+          </div>
+        </div>
+
         <!-- 카메라 input (실제 카메라 접근) -->
         <input id="turup-camera-input" type="file" accept="image/*" capture="environment" style="display:none;"/>
 
@@ -1538,6 +1560,8 @@ class Component extends DCLogic {
     toast: false,
     toastMsg: '',
     capturedPhoto: null,
+    pushNotif: false,
+    pushNotifKey: 0,
     toastKey: 0,
     goalLevel: '초급',
     toggleStretchNotif: true,
@@ -1563,12 +1587,17 @@ class Component extends DCLogic {
 
   componentDidMount() {
     setTimeout(() => this.setState({ screen: 'onboarding' }), 2600);
+    setTimeout(() => {
+      this.setState(s => ({ pushNotif: true, pushNotifKey: s.pushNotifKey + 1 }));
+      this._pushTimer = setTimeout(() => this.setState({ pushNotif: false }), 5000);
+    }, 12000);
   }
 
   componentWillUnmount() {
     if (this._stretchTimer) clearInterval(this._stretchTimer);
     if (this._togetherTimer) clearInterval(this._togetherTimer);
     if (this._toastTimer) clearTimeout(this._toastTimer);
+    if (this._pushTimer) clearTimeout(this._pushTimer);
   }
 
   _friendName(key) {
@@ -1577,6 +1606,7 @@ class Component extends DCLogic {
   _showFriendToast(key) {
     const msg = this._friendName(key) + '님에게 알림을 보냈습니다';
     if (this._toastTimer) clearTimeout(this._toastTimer);
+    if (this._pushTimer) clearTimeout(this._pushTimer);
     this.setState({ toast: false });
     requestAnimationFrame(() => {
       this.setState(s => ({ toast: true, toastMsg: msg, toastKey: (s.toastKey || 0) + 1 }));
@@ -1629,7 +1659,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', toastKey = 0, togetherCard, capturedPhoto = null, animKey = 0, searchQuery = '', addedFriendIds = [], goalLevel = '초급', toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true } = this.state;
+    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', toastKey = 0, togetherCard, capturedPhoto = null, pushNotif = false, pushNotifKey = 0, animKey = 0, searchQuery = '', addedFriendIds = [], goalLevel = '초급', toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true } = this.state;
 
     // Friend search data
     const allFriends = [
@@ -1796,6 +1826,7 @@ class Component extends DCLogic {
             onClick: addedFriendIds.includes(f.id) ? undefined : () => {
               this.setState(prev => ({ addedFriendIds: [...prev.addedFriendIds, f.id] }));
               if (this._toastTimer) clearTimeout(this._toastTimer);
+    if (this._pushTimer) clearTimeout(this._pushTimer);
               this.setState({ toast: false });
               requestAnimationFrame(() => {
                 this.setState(s => ({ toast: true, toastMsg: '친구 요청을 보냈습니다.', toastKey: (s.toastKey || 0) + 1 }));
@@ -1840,6 +1871,11 @@ class Component extends DCLogic {
       toggleFN:  () => this.setState(s => ({ toggleFriendNotif:  !s.toggleFriendNotif })),
       toggleBGN: () => this.setState(s => ({ toggleBgNotif:      !s.toggleBgNotif })),
       toggleEMN: () => this.setState(s => ({ toggleEmailNotif:   !s.toggleEmailNotif })),
+
+      pushNotifOp:  pushNotif ? 1 : 0,
+      pushNotifPE:  pushNotif ? 'auto' : 'none',
+      pushNotifKey,
+      dismissPush: () => this.setState({ pushNotif: false }),
 
       // Captured photo card
       capturedPhotoEl: capturedPhoto
