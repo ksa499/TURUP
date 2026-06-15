@@ -1569,10 +1569,21 @@ class Component extends DCLogic {
     if (this._toastTimer) clearTimeout(this._toastTimer);
   }
 
-  _sendTogether(key) {
-    this.setState(s => ({ notif: { ...s.notif, [key]: 'sent' }, toast: true, toastMsg: '알림을 보냈어요', togetherCard: 'sent' }));
+  _friendName(key) {
+    return { alex: 'Alex', sarah: 'Sarah', jordan: 'Jordan', casey: 'Casey', elena: 'Elena' }[key] || key;
+  }
+  _showFriendToast(key) {
+    const msg = this._friendName(key) + '님에게 알림을 보냈습니다';
     if (this._toastTimer) clearTimeout(this._toastTimer);
-    this._toastTimer = setTimeout(() => this.setState({ toast: false }), 2200);
+    this.setState({ toast: false });
+    requestAnimationFrame(() => {
+      this.setState({ toast: true, toastMsg: msg });
+      this._toastTimer = setTimeout(() => this.setState({ toast: false }), 2200);
+    });
+  }
+  _sendTogether(key) {
+    this.setState(s => ({ notif: { ...s.notif, [key]: 'sent' }, togetherCard: 'sent' }));
+    this._showFriendToast(key);
   }
 
   componentDidUpdate(_, prevState) {
@@ -1976,15 +1987,15 @@ class Component extends DCLogic {
       elenaCard1Label:  notif1.elena  ? '알림을 보냈어요' : '스트레칭 하세요!',
 
       // Handlers
-      alexOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, alex: true } })),
+      alexOpt1: () => { this.setState(s => ({ notif1: { ...s.notif1, alex: true } })); this._showFriendToast('alex'); },
       alexOpt2:  () => this._sendTogether('alex'),
-      sarahOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, sarah: true } })),
+      sarahOpt1: () => { this.setState(s => ({ notif1: { ...s.notif1, sarah: true } })); this._showFriendToast('sarah'); },
       sarahOpt2: () => this._sendTogether('sarah'),
-      jordanOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, jordan: true } })),
+      jordanOpt1: () => { this.setState(s => ({ notif1: { ...s.notif1, jordan: true } })); this._showFriendToast('jordan'); },
       jordanOpt2: () => this._sendTogether('jordan'),
-      caseyOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, casey: true } })),
+      caseyOpt1: () => { this.setState(s => ({ notif1: { ...s.notif1, casey: true } })); this._showFriendToast('casey'); },
       caseyOpt2:  () => this._sendTogether('casey'),
-      elenaOpt1: () => this.setState(s => ({ notif1: { ...s.notif1, elena: true } })),
+      elenaOpt1: () => { this.setState(s => ({ notif1: { ...s.notif1, elena: true } })); this._showFriendToast('elena'); },
       elenaOpt2:  () => this._sendTogether('elena'),
 
       // Contact add
