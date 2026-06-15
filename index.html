@@ -118,7 +118,7 @@
                 <!-- 4. 그림자 (거북이 움직임에 따라 스케일) -->
                 <div class="anim-shadow" style="position:absolute; left:144px; top:216.5px; width:87px; height:17px; border-radius:50%; background:rgb(129,121,106); opacity:0.2; pointer-events:none;"></div>
                 <!-- 5. 거북이 -->
-                <img src="assets/turtle-hero.png" class="anim-turtle" style="position:absolute; left:118px; top:41.5px; width:137px; height:185px; object-fit:contain; pointer-events:none;"/>
+                <img src="{{ homeTurtleSrc }}" class="anim-turtle" style="position:absolute; left:118px; top:41.5px; width:137px; height:185px; object-fit:contain; pointer-events:none;"/>
                 <!-- 6. 구름들 (최상단) -->
                 <img src="assets/cloud-large.png" class="anim-cloud-r" style="position:absolute; left:-41px; top:41.5px; width:149px; height:149px; object-fit:cover; pointer-events:none;"/>
                 <img src="assets/cloud-small.png" class="anim-cloud-r2" style="position:absolute; left:269px; top:-13.5px; width:130px; height:130px; object-fit:cover; pointer-events:none;"/>
@@ -128,7 +128,7 @@
             <div style="margin:-32px 24px 0; position:relative; z-index:3; background:white; border-radius:12px; padding:12px 16px; box-shadow:0 0 16px rgba(0,0,0,.05);">
               <!-- 상단: Lv.3 거북이 -->
               <div style="margin-bottom:6px;">
-                <span style="font-family:'Pretendard Variable','Noto Sans KR',sans-serif; font-size:16px; font-weight:600; color:rgb(86,210,255); letter-spacing:-0.03em; line-height:1.4;">Lv.3 거북이</span>
+                <span style="font-family:'Pretendard Variable','Noto Sans KR',sans-serif; font-size:16px; font-weight:600; color:rgb(86,210,255); letter-spacing:-0.03em; line-height:1.4;">{{ homeLevelText }}</span>
               </div>
               <!-- 프로그레스 바 + % (같은 행) -->
               <div style="display:flex; align-items:center; gap:8px;">
@@ -140,14 +140,14 @@
                     </linearGradient>
                   </defs>
                   <rect x="32" y="56" width="252" height="18" rx="9" fill="#EEF0EE"></rect>
-                  <rect x="32" y="56" width="150" height="18" rx="9" fill="url(#pb_grad)" style="transform-origin:32px 65px; animation-name:{{ pbAnim }}; animation-duration:1s; animation-timing-function:cubic-bezier(.25,.46,.45,.94); animation-fill-mode:both; animation-delay:0.2s;"></rect>
+                  <rect x="32" y="56" width="{{ xpBarWidth }}" height="18" rx="9" fill="url(#pb_grad)" style="transform-origin:32px 65px; animation-name:{{ pbAnim }}; animation-duration:1s; animation-timing-function:cubic-bezier(.25,.46,.45,.94); animation-fill-mode:both; animation-delay:0.2s;"></rect>
                   <circle cx="42" cy="65" r="5" fill="white" stroke="#BCEDFF" stroke-width="2"></circle>
                   <circle cx="100" cy="65" r="5" fill="white" stroke="#BCEDFF" stroke-width="2"></circle>
                   <circle cx="158" cy="65" r="5" fill="white" stroke="#BCEDFF" stroke-width="2"></circle>
                   <circle cx="216" cy="65" r="5" fill="white" stroke="#EEF0EE" stroke-width="2"></circle>
                   <circle cx="274" cy="65" r="5" fill="white" stroke="#EEF0EE" stroke-width="2"></circle>
                 </svg>
-                <span style="font-family:'Pretendard Variable','Noto Sans KR',sans-serif; font-size:16px; font-weight:600; color:rgb(101,107,103); letter-spacing:-0.03em; line-height:1.4; white-space:nowrap;">60%</span>
+                <span style="font-family:'Pretendard Variable','Noto Sans KR',sans-serif; font-size:16px; font-weight:600; color:rgb(101,107,103); letter-spacing:-0.03em; line-height:1.4; white-space:nowrap;">{{ xpPercent }}</span>
               </div>
             </div>
             <!-- Weekly progress - 피그마 스펙 카드 + SVG 차트 영역 crop -->
@@ -667,7 +667,7 @@
               </div>
               <div style="flex:1; background:white; border-radius:12px; padding:16px; box-shadow:0 0 16px rgba(0,0,0,.05);">
                 <div style="font-size:14px; color:rgb(134,143,137); margin-bottom:4px; letter-spacing:-0.03em;">레벨</div>
-                <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">Lv.3 거북이</div>
+                <div style="font-size:20px; font-weight:600; color:rgb(34,34,34); letter-spacing:-0.03em;">{{ homeLevelText }}</div>
               </div>
             </div>
             <div style="height:16px;"></div>
@@ -1571,6 +1571,8 @@ class Component extends DCLogic {
     timerSec: 45,
     timerActive: false,
     togetherSec: 600,
+    playerLevel: 1,
+    playerXP: 0,
   };
 
   // Stretch guide data
@@ -1617,7 +1619,11 @@ class Component extends DCLogic {
       if (cur <= 1) {
         clearInterval(this._stretchTimer);
         this._stretchTimer = null;
-        this.setState({ timerSec: 0, screen: 'stretch_complete' });
+        this.setState(s => {
+          const newXP = (s.playerXP || 0) + 30;
+          const curLv = s.playerLevel || 1;
+          return { timerSec: 0, screen: 'stretch_complete', playerXP: newXP, playerLevel: curLv === 1 && newXP >= 30 ? 2 : curLv };
+        });
       } else {
         this.setState({ timerSec: cur - 1 });
       }
@@ -1642,7 +1648,11 @@ class Component extends DCLogic {
           if (cur <= 1) {
             clearInterval(this._stretchTimer);
             this._stretchTimer = null;
-            this.setState({ timerSec: 0, screen: 'stretch_complete' });
+            this.setState(s => {
+              const newXP = (s.playerXP || 0) + 30;
+              const curLv = s.playerLevel || 1;
+              return { timerSec: 0, screen: 'stretch_complete', playerXP: newXP, playerLevel: curLv === 1 && newXP >= 30 ? 2 : curLv };
+            });
           } else {
             this.setState({ timerSec: cur - 1 });
           }
@@ -1669,7 +1679,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', toastKey = 0, togetherCard, capturedPhoto = null, pushNotif = false, pushNotifKey = 0, animKey = 0, searchQuery = '', addedFriendIds = [], goalLevel = '초급', toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true } = this.state;
+    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', toastKey = 0, togetherCard, capturedPhoto = null, pushNotif = false, pushNotifKey = 0, animKey = 0, searchQuery = '', addedFriendIds = [], goalLevel = '초급', toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true, playerLevel = 1, playerXP = 0 } = this.state;
 
     // Friend search data
     const allFriends = [
@@ -1882,6 +1892,12 @@ class Component extends DCLogic {
       toggleBGN: () => this.setState(s => ({ toggleBgNotif:      !s.toggleBgNotif })),
       toggleEMN: () => this.setState(s => ({ toggleEmailNotif:   !s.toggleEmailNotif })),
 
+      // Player level display
+      homeTurtleSrc: playerLevel >= 2 ? 'assets/turtle-lv2.png' : 'assets/turtle-egg.png',
+      homeLevelText: playerLevel >= 2 ? 'Lv.2 아기거북이' : 'Lv.1 거북이알',
+      xpBarWidth: String(Math.round(Math.min(1, playerXP / (playerLevel >= 2 ? 100 : 30)) * 150)),
+      xpPercent: Math.round(Math.min(1, playerXP / (playerLevel >= 2 ? 100 : 30)) * 100) + '%',
+
       pushNotifOp:  pushNotif ? 1 : 0,
       pushNotifPE:  pushNotif ? 'auto' : 'none',
       pushNotifKey,
@@ -1950,7 +1966,15 @@ class Component extends DCLogic {
       gotoWelcome:           () => this.nav('welcome'),
       gotoStretchDetail:     () => this.nav('stretch_detail'),
       gotoStretchTimer:      () => this.nav('stretch_timer'),
-      gotoStretchComplete:   () => { if (this._stretchTimer) { clearInterval(this._stretchTimer); this._stretchTimer = null; } this.nav('stretch_complete'); },
+      gotoStretchComplete:   () => {
+        if (this._stretchTimer) { clearInterval(this._stretchTimer); this._stretchTimer = null; }
+        this.setState(s => {
+          const newXP = (s.playerXP || 0) + 30;
+          const curLv = s.playerLevel || 1;
+          return { playerXP: newXP, playerLevel: curLv === 1 && newXP >= 30 ? 2 : curLv };
+        });
+        this.nav('stretch_complete');
+      },
       gotoStretchTogether:   () => this.nav('stretch_together'),
       gotoStretchTogetherAccept: () => this.nav('stretch_together_accept'),
       gotoStretchTogetherComplete: () => this.nav('stretch_together_complete'),
