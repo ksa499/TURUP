@@ -1446,11 +1446,8 @@
               <div style="font-size:24px; font-weight:600; color:rgb(17,24,39); letter-spacing:-0.04em; line-height:1.4; margin-bottom:12px;">함께하는 스트레칭을<br/>완료했어요!</div>
               <div style="font-size:16px; color:rgb(107,114,128); letter-spacing:-0.03em;">친구들에게 사진을 공유해 보세요.</div>
             </div>
-            <!-- 사진 플레이스홀더 -->
-            <div style="margin:24px 24px 0; border-radius:16px; background:rgb(238,240,238); height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="rgb(168,178,171)"><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
-              <span style="font-size:13px; color:rgb(185,194,188); letter-spacing:-0.02em;">촬영한 사진</span>
-            </div>
+            <!-- 사진 플레이스홀더 / 촬영된 사진 -->
+            {{ capturedPhotoEl }}
             <!-- 친구 사진 힌트 -->
             <div style="margin:16px 24px 0; border-radius:12px; background:rgb(247,247,247); padding:16px; display:flex; align-items:center; gap:12px;">
               <div style="width:48px; height:48px; border-radius:50%; background:url(assets/friend-sarah.jpg) center/cover; flex-shrink:0;"></div>
@@ -1540,6 +1537,7 @@ class Component extends DCLogic {
     ringTick: 0,
     toast: false,
     toastMsg: '',
+    capturedPhoto: null,
     toastKey: 0,
     goalLevel: '초급',
     toggleStretchNotif: true,
@@ -1631,7 +1629,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', toastKey = 0, togetherCard, animKey = 0, searchQuery = '', addedFriendIds = [], goalLevel = '초급', toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true } = this.state;
+    const { screen: s, notif, notif1, contact, ringTick, vcOn, stretchIdx, timerSec, togetherSec, toast, toastMsg = '', toastKey = 0, togetherCard, capturedPhoto = null, animKey = 0, searchQuery = '', addedFriendIds = [], goalLevel = '초급', toggleStretchNotif = true, toggleFriendNotif = true, toggleBgNotif = true, toggleEmailNotif = true } = this.state;
 
     // Friend search data
     const allFriends = [
@@ -1843,6 +1841,18 @@ class Component extends DCLogic {
       toggleBGN: () => this.setState(s => ({ toggleBgNotif:      !s.toggleBgNotif })),
       toggleEMN: () => this.setState(s => ({ toggleEmailNotif:   !s.toggleEmailNotif })),
 
+      // Captured photo card
+      capturedPhotoEl: capturedPhoto
+        ? React.createElement('div', { style: { margin:'24px 24px 0', borderRadius:16, overflow:'hidden', height:300, background:'rgb(238,240,238)' } },
+            React.createElement('img', { src: capturedPhoto, style: { width:'100%', height:'100%', objectFit:'cover', display:'block' } })
+          )
+        : React.createElement('div', { style: { margin:'24px 24px 0', borderRadius:16, background:'rgb(238,240,238)', height:300, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:12 } },
+            React.createElement('svg', { width:48, height:48, viewBox:'0 0 24 24', fill:'rgb(168,178,171)' },
+              React.createElement('path', { d:'M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z' })
+            ),
+            React.createElement('span', { style:{ fontSize:13, color:'rgb(185,194,188)', letterSpacing:'-0.02em' } }, '촬영한 사진')
+          ),
+
       // Toast
       toastOp: toast ? 1 : 0,
       toastPE: toast ? 'auto' : 'none',
@@ -1865,7 +1875,11 @@ class Component extends DCLogic {
         const input = document.getElementById('turup-camera-input');
         input.onchange = (e) => {
           if (e.target.files && e.target.files[0]) {
-            this.setState({ screen: 'photo_done', togetherCard: 'done' });
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              this.setState({ capturedPhoto: ev.target.result, screen: 'photo_done', togetherCard: 'done' });
+            };
+            reader.readAsDataURL(e.target.files[0]);
           }
           input.value = '';
         };
